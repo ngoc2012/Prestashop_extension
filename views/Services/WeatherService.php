@@ -1,11 +1,11 @@
 <?php
-namespace PrestaShop\Module\Weather\Services;
+namespace App\Services;
 
-use PrestaShop\Module\Weather\Models\City;
-use PrestaShop\Module\Weather\Models\History;
-use PrestaShop\Module\Weather\Services\API\FreeWeatherApi;
-use PrestaShop\Module\Weather\Services\API\OpenWeatherApi;
-
+use App\Models\City;
+use App\Models\History;
+use App\Services\API\FreeWeatherApi;
+use App\Services\API\OpenWeatherApi;
+use InvalidArgumentException;
 /**
  * WeatherService class to fetch weather data
  */
@@ -21,7 +21,7 @@ class WeatherService {
      *
      * @param City $city The City object.
      * @param string|null $apiName The name of the API to use (optional).
-     * @return void
+     * @return History
      */
     public static function getData($city, $apiName = null) {
         switch ($apiName) {
@@ -33,12 +33,22 @@ class WeatherService {
                 break;
         }
         list($temperature, $humidity) = $api->fetchWeather($city);
+        if (!$city->getId()) {
+            try {
+                $cityFound = City::findByName($city->getName());
+                $city->setId($cityFound->getId());
+            } catch (InvalidArgumentException $e) {
+                $newCity = City::save($city->getName());
+                $city->setId($newCity->getId());
+            }
+        }
         $history = History::transformDataToHistory([
             "cityId" => $city->getId(),
-            "api" => $apiName,
+            "api" => $api->getApiName(),
             "temperature" => $temperature,
             "humidity" => $humidity
         ]);
         History::save($history);
+        return $history;
     }
 }

@@ -1,14 +1,8 @@
 <?php
 namespace PrestaShop\Module\Weather\Controllers;
 
-use ConfigurationCore;
 use PrestaShop\Module\Weather\Controllers\AbstractViewController;
-use PrestaShop\Module\Weather\Services\WeatherService;
 use PrestaShop\Module\Weather\Models\City;
-use PrestaShopDatabaseException;
-use RuntimeException;
-use InvalidArgumentException;
-use Exception;
 
 /**
  * Controller for the city weather page
@@ -53,23 +47,15 @@ class CityWeatherController extends AbstractViewController {
      * @return void
      */
     public function init() {
-        try {
-            WeatherService::getData($this->city, $this->apiName);
-            $lastHistory = $this->city->getLastHistory();
-        } catch (RuntimeException $e) {
-            (new ErrorController('smarty'))->init($e->getMessage());
-            exit;
-        } catch (InvalidArgumentException $e) {
-            (new ErrorController('smarty'))->init($e->getMessage());
-            exit;
-        } catch (PrestaShopDatabaseException $e) {
-            (new ErrorController('smarty'))->init($e->getMessage());
-            exit;
-        } catch (Exception $e) { // catch anything else
-            (new ErrorController('smarty'))->init('Unexpected error: ' . $e->getMessage());
+        $this->getData($this->city, $this->apiName);
+        $histories = $this->city->getHistories();
+        if (count($histories) == 0) {
+            (new ErrorController('smarty'))->init('No weather history found for this city.');
             exit;
         }
-
-        $this->getView()->render('city_weather.tpl', ['base_url' => ConfigurationCore::get('BASE_URL'), 'city' => $this->city, 'lastHistory' => $lastHistory]);
+        City::updateVisitedAt($this->city->id);
+        $weatherPanel = $this->getView()->fetch('weatherPanel.tpl', ['city' => $this->city, 'history' => $histories[0]]);
+        $container = $this->getView()->fetch('cityWeather.tpl', ['histories' => $histories, 'weatherPanel' => $weatherPanel]);
+        $this->getView()->renderMain('index.tpl', $container);
     }
 }

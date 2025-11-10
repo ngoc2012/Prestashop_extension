@@ -1,6 +1,7 @@
 <?php
-namespace PrestaShop\Module\Weather\Core;
+namespace App\Core;
 
+use Config\AppConfig;
 use PDO;
 
 /**
@@ -52,10 +53,10 @@ class Database {
      * @param string $charset
      */
     public function __construct($host = null, $db = null, $user = null, $pass = null, $charset = null) {
-        $this->host = $host ?: _DB_SERVER_;
-        $this->db = $db ?: _DB_NAME_;
-        $this->user = $user ?: _DB_USER_;
-        $this->pass = $pass ?: _DB_PASSWD_;
+        $this->host = $host ?: AppConfig::DB_HOST;
+        $this->db = $db ?: AppConfig::DB_NAME;
+        $this->user = $user ?: AppConfig::DB_USER;
+        $this->pass = $pass ?: AppConfig::DB_PASS;
         $this->charset = $charset ?: 'utf8mb4';
         $this->dsn = "mysql:host={$this->host};dbname={$this->db};charset={$this->charset}";
     }

@@ -1,5 +1,5 @@
 <?php
-namespace PrestaShop\Module\Weather\Models;
+namespace App\Models;
 
 /**
  * Base model class
@@ -21,6 +21,15 @@ class BaseModel {
 
     public function getId() {
         return $this->id;
+    }
+
+
+    // ===============
+    // === Setters ===
+    // ===============
+
+    public function setId($id) {
+        $this->id = $id;
     }
 
 

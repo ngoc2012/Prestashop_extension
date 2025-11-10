@@ -1,7 +1,6 @@
 <?php
 namespace PrestaShop\Module\Weather\Controllers;
 
-use ConfigurationCore;
 use PrestaShop\Module\Weather\Controllers\AbstractViewController;
 
 /**
@@ -20,6 +19,7 @@ class ErrorController extends AbstractViewController {
      * @return void
      */
     public function init($message = null) {
-        $this->getView()->render('error.tpl', ['base_url' => ConfigurationCore::get('BASE_URL'), 'errorMessage' => $message]);
+        $container = $this->getView()->fetch('error.tpl', ['errorMessage' => $message]);
+        $this->getView()->renderMain('index.tpl', $container);
     }
 }

@@ -1,5 +1,5 @@
 <?php
-namespace PrestaShop\Module\Weather\Core;
+namespace App\Core;
 
 use Exception;
 
