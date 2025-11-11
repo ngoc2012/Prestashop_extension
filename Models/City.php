@@ -17,28 +17,19 @@ class City extends ObjectModel {
     // === Variables ===
     // =================
 
+    public $id_cities;
     /* @var string city name */
     public $name;
     /* @var string */
     public $visitedAt;
 
     public static $definition = [
-        'table' => _DB_PREFIX_ . 'cities',
-        'primary' => 'id',
+        'table' => 'cities',
+        'primary' => 'id_cities',
         'fields' => [
-            'name' => [
-                'type' => self::TYPE_STRING,
-                'validate' => 'isName',
-                'required' => true,
-                'unique' => true,
-                'size' => 100
-            ],
-            'visitedAt' => [
-                'type' => self::TYPE_STRING,  // use string instead of TYPE_DATE
-                // 'validate' => 'isDate',
-                'validate' => 'isAnything', // skip validation
-                'size' => 19,                 // 'YYYY-MM-DD HH:MM:SS' length = 19
-            ],
+            'id_cities' => ['type' => self::TYPE_INT, 'validate' => 'isUnsignedInt', 'required' => true],
+            'name' => ['type' => self::TYPE_STRING, 'validate' => 'isName', 'required' => true, 'unique' => true, 'size' => 100],
+            'visitedAt' => ['type' => self::TYPE_DATE, 'validate' => 'isDate'],
         ],
     ];
 

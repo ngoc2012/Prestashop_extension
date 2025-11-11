@@ -2,6 +2,7 @@
 namespace PrestaShop\Module\Weather\Controllers;
 
 use ContextCore;
+use Exception;
 use PrestaShop\Module\Weather\Controllers\AbstractViewController;
 use PrestaShop\Module\Weather\Models\City;
 use PrestaShop\Module\Weather\Models\History;
@@ -44,7 +45,13 @@ class CitiesListController extends AbstractViewController {
         $city = new City();
         $city->name = "Parisdfsdfas";
         $city->visitedAt = date('Y-m-d H:i:s');
-        $city->add(); // -> Crash
+
+        try {
+            $city->add();
+        } catch (Exception $e) {
+            var_dump("Error adding city: " . $e->getMessage());
+        }
+        // $city->add(); // -> Crash
 
         var_dump("end game" . $cities);
         // // Load a city by ID
