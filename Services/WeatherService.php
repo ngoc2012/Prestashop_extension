@@ -1,11 +1,12 @@
 <?php
-namespace App\Services;
+namespace PrestaShop\Module\Weather\Services;
 
-use App\Models\City;
-use App\Models\History;
-use App\Services\API\FreeWeatherApi;
-use App\Services\API\OpenWeatherApi;
-use InvalidArgumentException;
+use PrestaShop\Module\Weather\Models\City;
+use PrestaShop\Module\Weather\Models\History;
+use PrestaShop\Module\Weather\Services\API\FreeWeatherApi;
+use PrestaShop\Module\Weather\Services\API\OpenWeatherApi;
+// use InvalidArgumentException;
+
 /**
  * WeatherService class to fetch weather data
  */
@@ -33,22 +34,25 @@ class WeatherService {
                 break;
         }
         list($temperature, $humidity) = $api->fetchWeather($city);
-        if (!$city->getId()) {
-            try {
-                $cityFound = City::findByName($city->getName());
-                $city->setId($cityFound->getId());
-            } catch (InvalidArgumentException $e) {
-                $newCity = City::save($city->getName());
-                $city->setId($newCity->getId());
-            }
-        }
+        // if (!$city->getId()) {
+        //     try {
+        //         $cityFound = City::findByName($city->getName());
+        //         $city->setId($cityFound->id);
+        //     } catch (InvalidArgumentException $e) {
+        //         $newCity = City::save($city->getName());
+        //         $city->setId($newCity->getId());
+        //     }
+        // }
+        var_dump([$temperature, $humidity]);
         $history = History::transformDataToHistory([
-            "cityId" => $city->getId(),
+            "cityId" => $city->id,
             "api" => $api->getApiName(),
             "temperature" => $temperature,
             "humidity" => $humidity
         ]);
-        History::save($history);
+        var_dump($history);
+        History::save2Db($history);
+        var_dump("Saved to DB");
         return $history;
     }
 }

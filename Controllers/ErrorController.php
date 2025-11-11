@@ -1,12 +1,12 @@
 <?php
 namespace PrestaShop\Module\Weather\Controllers;
 
-use PrestaShop\Module\Weather\Controllers\AbstractViewController;
+use ContextCore;
 
 /**
  * Controller for handling errors pages
  */
-class ErrorController extends AbstractViewController {
+class ErrorController {
 
 
     // =========================
@@ -18,8 +18,9 @@ class ErrorController extends AbstractViewController {
      * @param string $message
      * @return void
      */
-    public function init($message = null) {
-        $container = $this->getView()->fetch('error.tpl', ['errorMessage' => $message]);
-        $this->getView()->renderMain('index.tpl', $container);
+    public static function init($message = null) {
+        $context = ContextCore::getContext();
+        $context->smarty->assign('errorMessage', $message);
+        $context->smarty->display('error.tpl');
     }
 }

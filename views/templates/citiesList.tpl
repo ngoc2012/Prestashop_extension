@@ -1,4 +1,5 @@
-{$weatherPanel}
+
+{include file="modules/weather/views/templates/weatherPanel.tpl"}
 
 <form method="get" action="index.php" class="text-center" style="margin-bottom: 30px;">
     <div class="form-group" style="display: inline-block; margin-right: 10px;">

@@ -245,6 +245,8 @@ class Weather extends Module
 
     public function hookDisplayHome()
     {
+        $tpl_path = _PS_MODULE_DIR_ . 'weather/views/templates/';
+        $this->context->smarty->addTemplateDir($tpl_path);
         main_index();
     }
 }

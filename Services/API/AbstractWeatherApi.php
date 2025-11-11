@@ -1,7 +1,7 @@
 <?php
-namespace App\Services\API;
+namespace PrestaShop\Module\Weather\Services\API;
 
-use App\Models\City;
+use PrestaShop\Module\Weather\Models\City;
 
 /**
  * Base class for all WeatherApi type

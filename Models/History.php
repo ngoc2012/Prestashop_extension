@@ -36,7 +36,7 @@ class History extends ObjectModel {
     // =========================
 
     public static $definition = [
-        'table' => 'history',
+        'table' =>  _DB_PREFIX_ . 'history',
         'primary' => 'id',
         'fields' => [
             'cityId'      => ['type' => self::TYPE_INT, 'validate' => 'isUnsignedId', 'required' => true],
@@ -183,7 +183,7 @@ class History extends ObjectModel {
         $history->api = (string)$data['api'];
         $history->temperature = (float)$data['temperature'];
         $history->humidity = (float)$data['humidity'];
-        $history->createdAt = $data['createdAt'] ?? date('Y-m-d H:i:s');
+        $history->createdAt = isset($data['createdAt']) ? $data['createdAt'] : date('Y-m-d H:i:s');
 
         return $history;
     }

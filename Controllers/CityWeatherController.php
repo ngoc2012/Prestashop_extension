@@ -3,7 +3,7 @@ namespace PrestaShop\Module\Weather\Controllers;
 
 use PrestaShop\Module\Weather\Controllers\AbstractViewController;
 use PrestaShop\Module\Weather\Models\City;
-
+use ContextCore;
 /**
  * Controller for the city weather page
  */
@@ -15,9 +15,9 @@ class CityWeatherController extends AbstractViewController {
     // =================
 
     /* @var City */
-    private $city;
+    public static $city;
     /* @var string */
-    private $apiName;
+    public static $apiName;
 
 
     // ===================
@@ -30,8 +30,7 @@ class CityWeatherController extends AbstractViewController {
      * @param City $city
      * @param string $apiName
      */
-    public function __construct($viewType, City $city, $apiName) {
-        parent::__construct($viewType);
+    public function __construct(City $city, $apiName) {
         $this->city = $city;
         $this->apiName = $apiName;
     }
@@ -50,12 +49,14 @@ class CityWeatherController extends AbstractViewController {
         $this->getData($this->city, $this->apiName);
         $histories = $this->city->getHistories();
         if (count($histories) == 0) {
-            (new ErrorController('smarty'))->init('No weather history found for this city.');
+            ErrorController::init('No weather history found for this city.');
             exit;
         }
         City::updateVisitedAt($this->city->id);
-        $weatherPanel = $this->getView()->fetch('weatherPanel.tpl', ['city' => $this->city, 'history' => $histories[0]]);
-        $container = $this->getView()->fetch('cityWeather.tpl', ['histories' => $histories, 'weatherPanel' => $weatherPanel]);
-        $this->getView()->renderMain('index.tpl', $container);
+        $context = ContextCore::getContext();
+        $context->smarty->assign('histories', $histories);
+        $context->smarty->assign('city', $this->city);
+        $context->smarty->assign('history', $histories[0]);
+        $context->display('cityWeather.tpl');
     }
 }

@@ -18,16 +18,27 @@ class City extends ObjectModel {
     // =================
 
     /* @var string city name */
-    private $name;
+    public $name;
     /* @var string */
-    private $visitedAt;
+    public $visitedAt;
 
     public static $definition = [
-        'table' => 'cities',
+        'table' => _DB_PREFIX_ . 'cities',
         'primary' => 'id',
         'fields' => [
-            'name' => ['type' => self::TYPE_STRING, 'validate' => 'isName', 'required' => true, 'unique' => true, 'size' => 100],
-            'visitedAt' => ['type' => self::TYPE_DATE, 'validate' => 'isDate'],
+            'name' => [
+                'type' => self::TYPE_STRING,
+                'validate' => 'isName',
+                'required' => true,
+                'unique' => true,
+                'size' => 100
+            ],
+            'visitedAt' => [
+                'type' => self::TYPE_STRING,  // use string instead of TYPE_DATE
+                // 'validate' => 'isDate',
+                'validate' => 'isAnything', // skip validation
+                'size' => 19,                 // 'YYYY-MM-DD HH:MM:SS' length = 19
+            ],
         ],
     ];
 
@@ -46,7 +57,6 @@ class City extends ObjectModel {
     }
 
     public function setName($name) {
-        //verif si name validation correct
         if (!ValidateCore::isName($name)) {
             throw new PrestaShopExceptionCore("Invalid city name: '$name'.");
         }
@@ -96,12 +106,16 @@ class City extends ObjectModel {
         if ($limit) {
             $sql .= ' LIMIT ' . (int)$limit;
         }
-        $citiesData = Db::getInstance()->executeS($sql);
+        $rows = Db::getInstance()->executeS($sql);
         $cities = [];
-        foreach ($citiesData as $cityData) {
-            $cities[] = new City($cityData['id']);
+        foreach ($rows as $row) {
+            var_dump($row);
+            $cities[] = new City((int)$row['id']);
         }
-
+        var_dump(count($cities));
+        var_dump($cities[0]);
+        $city = new City(2);
+        var_dump($city);
         return $cities;
     }
 
@@ -116,6 +130,16 @@ class City extends ObjectModel {
         $city->visitedAt = date('Y-m-d H:i:s');
         $city->add();
         return $city;
+    }
+
+    /**
+     * Delete the city from the database.
+     * @param int $id
+     * @return void
+     */
+    public static function deleteDb($id) {
+        $city = new City($id);
+        $city->delete();
     }
 
     /**

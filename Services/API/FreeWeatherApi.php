@@ -1,10 +1,10 @@
 <?php
-namespace App\Services\API;
+namespace PrestaShop\Module\Weather\Services\API;
 
-use App\Models\City;
-use App\Services\API\AbstractWeatherApi;
-use Config\AppConfig;
+use PrestaShop\Module\Weather\Models\City;
+use PrestaShop\Module\Weather\Services\API\AbstractWeatherApi;
 use RuntimeException;
+use ConfigurationCore;
 
 /**
  * FreeWeatherApi class to interact with the FreeWeather API
@@ -25,8 +25,8 @@ class FreeWeatherApi extends AbstractWeatherApi {
     public function __construct($apiKey = null, $baseUrl = null) {
         parent::__construct();
         $this->apiName = "FreeWeatherApi";
-        $this->apiKey  = $apiKey ?: AppConfig::FREEWEATHER_API_KEY;
-        $this->baseUrl = $baseUrl ?: AppConfig::FREEWEATHER_BASE_URL;
+        $this->apiKey  = $apiKey ?: ConfigurationCore::get('FREEWEATHER_API_KEY');
+        $this->baseUrl = $baseUrl ?: ConfigurationCore::get('FREEWEATHER_BASE_URL');
     }
 
     
