@@ -32,7 +32,7 @@
 $sql = array();
 $sql[] = "SET FOREIGN_KEY_CHECKS = 0";
 $sql[] = "DROP TABLE IF EXISTS `" . _DB_PREFIX_ . "history`;";
-$sql[] = "DROP TABLE IF EXISTS `" . _DB_PREFIX_ . "cities`;";
+$sql[] = "DROP TABLE IF EXISTS `" . _DB_PREFIX_ . "city`;";
 $sql[] = "SET FOREIGN_KEY_CHECKS = 1";
 
 

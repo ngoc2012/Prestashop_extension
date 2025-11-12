@@ -25,7 +25,7 @@
 */
 $sql = array();
 
-$sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'cities` (
+$sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'city` (
     `id_city` INT(11) AUTO_INCREMENT PRIMARY KEY,
     `name` VARCHAR(100) NOT NULL UNIQUE
 ) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8mb4;';
@@ -37,12 +37,12 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'history` (
     `temperature` FLOAT,
     `humidity` FLOAT,
     `createdAt` DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (`cityId`) REFERENCES `' . _DB_PREFIX_ . 'cities`(`id`)
+    FOREIGN KEY (`cityId`) REFERENCES `' . _DB_PREFIX_ . 'city`(`id_city`)
         ON DELETE CASCADE
         ON UPDATE CASCADE
 ) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8mb4;';
 
-$sql[] = 'INSERT INTO `' . _DB_PREFIX_ . 'cities` (`name`) VALUES
+$sql[] = 'INSERT INTO `' . _DB_PREFIX_ . 'city` (`name`) VALUES
 ("New York"),
 ("Los Angeles"),
 ("Chicago"),
