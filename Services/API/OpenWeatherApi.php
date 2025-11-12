@@ -44,8 +44,7 @@ class OpenWeatherApi extends AbstractWeatherApi {
     public function fetchWeather($city) {
         $cityNameEscaped = $city->encodeCityName();
         $url = $this->getUrl($cityNameEscaped);
-        // @ before a PHP expression suppresses any warnings or notices
-        $response = @file_get_contents($url, false, $this->context);
+        $response = file_get_contents($url, false, $this->context);
         if (!$response) {
             throw new RuntimeException("Failed to fetch weather data from OpenWeather API.");
         }

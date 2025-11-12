@@ -6,8 +6,7 @@ require_once __DIR__ . '/../Models/History.php';
 
 use PrestaShop\Module\Weather\Controllers\CityWeatherController;
 use PrestaShop\Module\Weather\Controllers\CitiesListController;
-use RuntimeException;
-use PrestaShopExceptionCore;
+use PrestaShopException;
 
 /**
  * Main page: entry point for all pages
@@ -33,20 +32,16 @@ class MainController {
             } else {
                 try {
                     $city = \City::findByName($_GET['name']);
-                } catch (PrestaShopExceptionCore $e) {
-                    ErrorController::init($e->getMessage());
-                    exit;
+                } catch (PrestaShopException $e) {
+                    $city = new \City();
+                    $city->name = trim($_GET['name']);
+                    $city->add();
                 }
             }
             $controller = new CityWeatherController($city, trim($_GET['api']));
         } else {
             $controller = new CitiesListController();
         }
-        try {
-            $controller->init();
-        } catch (RuntimeException $e) {
-            ErrorController::init($e->getMessage());
-            exit;
-        }
+        $controller->init();
     }   
 }

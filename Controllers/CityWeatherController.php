@@ -49,7 +49,13 @@ class CityWeatherController extends AbstractViewController {
      * @return void
      */
     public function init() {
-        $this->getData($this->city, $this->apiName);
+        try {
+            $this->getData($this->city, $this->apiName);
+        } catch (\RuntimeException $e) {
+            
+            ErrorController::init($e->getMessage());
+            exit;
+        }
         $histories = $this->city->getHistories();
         if (count($histories) == 0) {
             ErrorController::init('No weather history found for this city.');

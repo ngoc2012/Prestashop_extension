@@ -3,7 +3,7 @@
         <div class="panel-body">
             <h1 class="text-danger" style="margin-bottom: 20px;">⚠️ Error</h1>
             <p class="lead">{$errorMessage|escape}</p>
-            <a href="index.php" class="btn btn-default" style="margin-top: 20px;">Return to Home</a>
+            <a href="/prestashop/en/" class="btn btn-default" style="margin-top: 20px;">Return to Home</a>
         </div>
     </div>
 </div>

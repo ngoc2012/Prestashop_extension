@@ -11,7 +11,8 @@ class City extends ObjectModel {
     // =================
     // === Variables ===
     // =================
-
+    
+    public $id;
     public $id_city;
     /* @var string city name */
     public $name;
@@ -41,7 +42,7 @@ class City extends ObjectModel {
 
     public function setName($name) {
         if (!ValidateCore::isName($name)) {
-            throw new PrestaShopExceptionCore("Invalid city name: '$name'.");
+            throw new PrestaShopException("Invalid city name: '$name'.");
         }
         $this->name = pSQL($name);
         return $this;
@@ -63,7 +64,7 @@ class City extends ObjectModel {
     /**
      * Retrieve a city by its name.
      * @param string $name
-     * @throws PrestaShopExceptionCore
+     * @throws PrestaShopException
      * @return City
      */
     public static function findByName($name)
@@ -73,7 +74,7 @@ class City extends ObjectModel {
         $sql = 'SELECT * FROM ' . _DB_PREFIX_ . 'city WHERE name = "' . $name . '"';
         $cityData = Db::getInstance()->getRow($sql);
         if (!$cityData) {
-            throw new PrestaShopExceptionCore("City with name '$name' not found.");
+            throw new PrestaShopException("City with name '$name' not found.");
         }
 
         return new City($cityData['id_city']);
@@ -137,17 +138,17 @@ class City extends ObjectModel {
     /**
      * Transform data array to City object
      * @param array $data
-     * @throws PrestaShopExceptionCore
+     * @throws PrestaShopException
      * @return City
      */
     public static function transformDataToCity(array $data)
     {
         if (!isset($data['name']) || !ValidateCore::isName($data['name'])) {
-            throw new PrestaShopExceptionCore("Missing or invalid city name.");
+            throw new PrestaShopException("Missing or invalid city name.");
         }
 
         if (isset($data['id_city']) && !is_numeric($data['id_city'])) {
-            throw new PrestaShopExceptionCore("City ID must be numeric.");
+            throw new PrestaShopException("City ID must be numeric.");
         }
 
         $city = new City(isset($data['id_city']) ? (int)$data['id_city'] : null);

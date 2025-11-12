@@ -5,9 +5,7 @@ require_once __DIR__ . '/../Models/City.php';
 require_once __DIR__ . '/../Models/History.php';
 
 use PrestaShop\Module\Weather\Services\WeatherService;
-use PDOException;
 use RuntimeException;
-use InvalidArgumentException;
 use Exception;
 
 /**
@@ -41,12 +39,9 @@ abstract class AbstractViewController {
             $lastHistory = WeatherService::getData($city, $apiName);
             return $lastHistory;
         } catch (RuntimeException $e) {
-            ErrorController::init($e->getMessage());
-            exit;
-        } catch (InvalidArgumentException $e) {
-            ErrorController::init($e->getMessage());
-            exit;
-        } catch (PDOException $e) {
+            if (count($city->getHistories()) === 0) {
+                $city->delete();
+            }
             ErrorController::init($e->getMessage());
             exit;
         } catch (Exception $e) { // catch anything else

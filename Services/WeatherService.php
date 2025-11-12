@@ -35,22 +35,15 @@ class WeatherService {
                 break;
         }
         list($temperature, $humidity) = $api->fetchWeather($city);
-        // if (!$city->getId()) {
-        //     try {
-        //         $cityFound = City::findByName($city->getName());
-        //         $city->setId($cityFound->id);
-        //     } catch (InvalidArgumentException $e) {
-        //         $newCity = City::save($city->getName());
-        //         $city->setId($newCity->getId());
-        //     }
-        // }
-        $history = \History::transformDataToHistory([
-            "cityId" => $city->id,
-            "api" => $api->getApiName(),
-            "temperature" => $temperature,
-            "humidity" => $humidity
-        ]);
-        \History::save2Db($history);
+        $history = new \History();
+        var_dump($city);
+        error_log("**********city id: " . $city->id_city);
+        $history->cityId = $city->id_city;
+        $history->api = $api->getApiName();
+        $history->temperature = $temperature;
+        $history->humidity = $humidity;
+        $history->createdAt = date('Y-m-d H:i:s');
+        $history->add();
         return $history;
     }
 }
