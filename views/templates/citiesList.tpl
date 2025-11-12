@@ -26,12 +26,12 @@
 
                             <!-- Buttons on the right -->
                             <div style="display: table-cell; text-align: right; white-space: nowrap;">
-                                <a href="?name={$city->encodeCityName()}&id_city={$city->id_city}&api=OpenWeatherApi" 
+                                <a href="?name={$city->encodeCityName()}&id_city={$city->id}&api=OpenWeatherApi" 
                                 class="btn btn-info btn-xs" style="margin-left: 5px;">
                                     Open Weather
                                 </a>
 
-                                <a href="?name={$city->encodeCityName()}&id_city={$city->id_city}&api=FreeWeatherApi" 
+                                <a href="?name={$city->encodeCityName()}&id_city={$city->id}&api=FreeWeatherApi" 
                                 class="btn btn-success btn-xs" style="margin-left: 5px;">
                                     Free Weather
                                 </a>

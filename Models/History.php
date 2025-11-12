@@ -10,7 +10,6 @@ class History extends ObjectModel {
     // =================
     // === Variables ===
     // =================
-
     public $id;
     /* @var int history id */
     public $id_history;
@@ -80,32 +79,6 @@ class History extends ObjectModel {
             }
         }
         return $histories;
-    }
-
-    /**
-     * Find the latest history record for a city by its ID
-     * @param int $cityId
-     * @return History|null
-     * @throws PrestaShopException
-     */
-    public static function findLastByCityId($cityId) {
-        $cityId = (int)$cityId;
-        if ($cityId <= 0) {
-            throw new PrestaShopException("Invalid city ID: $cityId");
-        }
-        $sql = 'SELECT `id_history` FROM `' . _DB_PREFIX_ . 'history` 
-                WHERE `cityId` = ' . $cityId . ' 
-                ORDER BY `createdAt` DESC';
-
-        $row = Db::getInstance()->getRow($sql);
-        if (!$row) {
-            return null; // No history record found
-        }
-        $history = new History($row['id_history']);
-        if (!ValidateCore::isLoadedObject($history)) {
-            throw new PrestaShopException("Failed to load history record with ID " . $row['id_history']);
-        }
-        return $history;
     }
 
     /**

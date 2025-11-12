@@ -40,14 +40,7 @@ class City extends ObjectModel {
         return urlencode($this->name);
     }
 
-    public function setName($name) {
-        if (!ValidateCore::isName($name)) {
-            throw new PrestaShopException("Invalid city name: '$name'.");
-        }
-        $this->name = pSQL($name);
-        return $this;
-    }
-
+    
     // ===========================
     // === Data access methods ===
     // ===========================
@@ -109,50 +102,4 @@ class City extends ObjectModel {
         return $cities;
     }
 
-    /**
-     * Save the city to the database.
-     * @param string $cityName
-     * @return City
-     */
-    public static function save2Db($cityName) {
-        $city = new City();
-        $city->setName($cityName);
-        $city->add();
-        return $city;
-    }
-
-    /**
-     * Delete the city from the database.
-     * @param int $id
-     * @return void
-     */
-    public static function deleteDb($id) {
-        $city = new City($id);
-        $city->delete();
-    }
-
-    // ===========
-    // === DTO ===
-    // ===========
-
-    /**
-     * Transform data array to City object
-     * @param array $data
-     * @throws PrestaShopException
-     * @return City
-     */
-    public static function transformDataToCity(array $data)
-    {
-        if (!isset($data['name']) || !ValidateCore::isName($data['name'])) {
-            throw new PrestaShopException("Missing or invalid city name.");
-        }
-
-        if (isset($data['id_city']) && !is_numeric($data['id_city'])) {
-            throw new PrestaShopException("City ID must be numeric.");
-        }
-
-        $city = new City(isset($data['id_city']) ? (int)$data['id_city'] : null);
-        $city->name = $data['name'];
-        return $city;
-    }
 }
