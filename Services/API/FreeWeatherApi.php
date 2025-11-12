@@ -1,7 +1,8 @@
 <?php
 namespace PrestaShop\Module\Weather\Services\API;
 
-use PrestaShop\Module\Weather\Models\City;
+require_once __DIR__ . "/../../Models/City.php";
+
 use PrestaShop\Module\Weather\Services\API\AbstractWeatherApi;
 use RuntimeException;
 use ConfigurationCore;
@@ -36,7 +37,7 @@ class FreeWeatherApi extends AbstractWeatherApi {
 
     /**
      * Get weather data for a specified city.
-     * @param City $city
+     * @param \City $city
      * @return [float, float]
      * @throws RuntimeException
      */

@@ -1,7 +1,9 @@
 <?php
 namespace PrestaShop\Module\Weather\Controllers;
 
-use PrestaShop\Module\Weather\Models\City;
+require_once __DIR__ . '/../Models/City.php';
+require_once __DIR__ . '/../Models/History.php';
+
 use PrestaShop\Module\Weather\Controllers\CityWeatherController;
 use PrestaShop\Module\Weather\Controllers\CitiesListController;
 use RuntimeException;
@@ -22,15 +24,15 @@ class MainController {
      */
     public static function index() {
         if (isset($_GET["name"])) {
-            if (isset($_GET['id'])) {
-                $city = new City(intval($_GET['id']));
+            if (isset($_GET['id_city'])) {
+                $city = new \City(intval($_GET['id_city']));
                 if (!$city || $city->name !== trim($_GET['name'])) {
                     ErrorController::init("City ID and name do not match.");
                     exit;
                 }
             } else {
                 try {
-                    $city = City::findByName($_GET['name']);
+                    $city = \City::findByName($_GET['name']);
                 } catch (PrestaShopExceptionCore $e) {
                     ErrorController::init($e->getMessage());
                     exit;

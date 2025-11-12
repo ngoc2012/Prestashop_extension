@@ -1,10 +1,6 @@
 <?php
-namespace PrestaShop\Module\Weather\Models;
 
-use ObjectModel;
-use PrestaShopExceptionCore;
-use Db;
-use ValidateCore;
+require_once "City.php";
 
 /**
  * History model class with history records of weather data
@@ -15,6 +11,8 @@ class History extends ObjectModel {
     // === Variables ===
     // =================
 
+    /* @var int history id */
+    public $id_history;
     /* @var int city id */
     public $cityId;
 
@@ -36,9 +34,10 @@ class History extends ObjectModel {
     // =========================
 
     public static $definition = [
-        'table' =>  _DB_PREFIX_ . 'history',
-        'primary' => 'id',
+        'table' =>  'history',
+        'primary' => 'id_history',
         'fields' => [
+            'id_history' => ['type' => self::TYPE_INT, 'validate' => 'isUnsignedId'],
             'cityId'      => ['type' => self::TYPE_INT, 'validate' => 'isUnsignedId', 'required' => true],
             'api'         => ['type' => self::TYPE_STRING, 'validate' => 'isName', 'required' => true],
             'temperature' => ['type' => self::TYPE_FLOAT, 'validate' => 'isFloat'],
@@ -64,7 +63,7 @@ class History extends ObjectModel {
         if ($cityId <= 0) {
             throw new PrestaShopExceptionCore("Invalid city ID: $cityId");
         }
-        $sql = 'SELECT `id` FROM `' . _DB_PREFIX_ . 'history` 
+        $sql = 'SELECT `id_history` FROM `' . _DB_PREFIX_ . 'history` 
                 WHERE `cityId` = ' . $cityId . ' 
                 ORDER BY `createdAt` DESC 
                 LIMIT ' . (int)$limit;
@@ -74,7 +73,7 @@ class History extends ObjectModel {
         }
         $histories = [];
         foreach ($ids as $row) {
-            $history = new History($row['id']);
+            $history = new History($row['id_history']);
             if (ValidateCore::isLoadedObject($history)) {
                 $histories[] = $history;
             }
@@ -93,18 +92,17 @@ class History extends ObjectModel {
         if ($cityId <= 0) {
             throw new PrestaShopExceptionCore("Invalid city ID: $cityId");
         }
-        $sql = 'SELECT `id` FROM `' . _DB_PREFIX_ . 'history` 
+        $sql = 'SELECT `id_history` FROM `' . _DB_PREFIX_ . 'history` 
                 WHERE `cityId` = ' . $cityId . ' 
-                ORDER BY `createdAt` DESC 
-                LIMIT 1';
+                ORDER BY `createdAt` DESC';
 
         $row = Db::getInstance()->getRow($sql);
         if (!$row) {
             return null; // No history record found
         }
-        $history = new History($row['id']);
+        $history = new History($row['id_history']);
         if (!ValidateCore::isLoadedObject($history)) {
-            throw new PrestaShopExceptionCore("Failed to load history record with ID " . $row['id']);
+            throw new PrestaShopExceptionCore("Failed to load history record with ID " . $row['id_history']);
         }
         return $history;
     }
@@ -115,16 +113,15 @@ class History extends ObjectModel {
      * @throws PrestaShopExceptionCore
      */
     public static function findLast() {
-        $sql = 'SELECT `id` FROM `' . _DB_PREFIX_ . 'history` 
-                ORDER BY `createdAt` DESC 
-                LIMIT 1';
+        $sql = 'SELECT `id_history` FROM `' . _DB_PREFIX_ . 'history` 
+                ORDER BY `createdAt` DESC';
         $row = Db::getInstance()->getRow($sql);
         if (!$row) {
             return null;
         }
-        $history = new History($row['id']);
+        $history = new History($row['id_history']);
         if (!ValidateCore::isLoadedObject($history)) {
-            throw new PrestaShopExceptionCore("Failed to load history record with ID " . $row['id']);
+            throw new PrestaShopExceptionCore("Failed to load history record with ID " . $row['id_history']);
         }
         return $history;
     }
@@ -177,7 +174,7 @@ class History extends ObjectModel {
             throw new PrestaShopExceptionCore("City with ID " . $data['cityId'] . " does not exist.");
         }
         // Create new object (or load by ID if provided)
-        $history = new History(isset($data['id']) ? (int)$data['id'] : null);
+        $history = new History(isset($data['id_history']) ? (int)$data['id_history'] : null);
         // Assign properties manually
         $history->cityId = (int)$data['cityId'];
         $history->api = (string)$data['api'];

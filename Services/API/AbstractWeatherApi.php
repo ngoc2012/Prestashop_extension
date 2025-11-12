@@ -1,7 +1,7 @@
 <?php
 namespace PrestaShop\Module\Weather\Services\API;
 
-use PrestaShop\Module\Weather\Models\City;
+require_once __DIR__ . "/../../Models/City.php";
 
 /**
  * Base class for all WeatherApi type
@@ -49,7 +49,7 @@ abstract class AbstractWeatherApi { // implements WeatherApiInterface {
     /**
      * Fetch weather data for a given city.
      *
-     * @param City $city The City object.
+     * @param \City $city The City object.
      */
     abstract public function fetchWeather($city);
 

@@ -26,13 +26,12 @@
 $sql = array();
 
 $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'cities` (
-    `id` INT(11) AUTO_INCREMENT PRIMARY KEY,
-    `name` VARCHAR(100) NOT NULL UNIQUE,
-    visitedAt DATETIME DEFAULT CURRENT_TIMESTAMP
+    `id_city` INT(11) AUTO_INCREMENT PRIMARY KEY,
+    `name` VARCHAR(100) NOT NULL UNIQUE
 ) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8mb4;';
 
 $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'history` (
-    `id` INT(11) AUTO_INCREMENT PRIMARY KEY,
+    `id_history` INT(11) AUTO_INCREMENT PRIMARY KEY,
     `cityId` INT(11) NOT NULL,
     `api` VARCHAR(100) NOT NULL,
     `temperature` FLOAT,

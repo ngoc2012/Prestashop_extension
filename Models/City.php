@@ -1,36 +1,28 @@
 <?php
-namespace PrestaShop\Module\Weather\Models;
 
-use PrestaShopException;
-use Db;
-use ObjectModelCore;
-use PrestaShopExceptionCore;
-use Validate;
-use ValidateCore;
+require_once "History.php";
+
 /**
  * City model class
  */
-class City extends ObjectModelCore {
+class City extends ObjectModel {
 
 
     // =================
     // === Variables ===
     // =================
 
+    public $id_city;
     /* @var string city name */
     public $name;
-    /* @var string */
-    public $visitedAt;
 
     public static $definition = [
         'table' => 'city',
-        'primary' => 'id',
+        'primary' => 'id_city',
         'fields' => [
-            'name' => ['type' => self::TYPE_STRING, 'validate' => 'isName', 'required' => true, 'unique' => true, 'size' => 100],
-            'visitedAt' => ['type' => self::TYPE_DATE, 'validate' => 'isDate'],
-        ],
-        // 👇 Important line
-        'classname' => 'City', // no namespace here!
+            'id_city' => ['type' => self::TYPE_INT, 'validate' => 'isUnsignedId'],
+            'name' => ['type' => self::TYPE_STRING, 'validate' => 'isName', 'required' => true, 'unique' => true, 'size' => 100]
+        ]
     ];
 
 
@@ -84,29 +76,35 @@ class City extends ObjectModelCore {
             throw new PrestaShopExceptionCore("City with name '$name' not found.");
         }
 
-        return new City($cityData['id']);
+        return new City($cityData['id_city']);
     }
 
     /**
-     * Retrieve all city from the database.
+     * Retrieve the most recently visited cities.
+     * @param int $limit
      * @return City[]
      */
-    public static function findAll($limit = 10)
-    {
-        $sql = 'SELECT * FROM ' . _DB_PREFIX_ . 'city ORDER BY visitedAt DESC';
-        if ($limit) {
-            $sql .= ' LIMIT ' . (int)$limit;
+    public static function findLastVisitedCities($limit = 10) {
+        $limit = (int)$limit;
+        $sql = "
+            SELECT c.*
+            FROM `" . _DB_PREFIX_ . "city` c
+            LEFT JOIN (
+                SELECT cityId, MAX(createdAt) AS lastVisit
+                FROM `" . _DB_PREFIX_ . "history`
+                GROUP BY cityId
+            ) h ON c.id_city = h.cityId
+            ORDER BY h.lastVisit DESC
+            LIMIT $limit
+        ";
+        $citiesData = Db::getInstance()->executeS($sql);
+        if (!$citiesData) {
+            return [];
         }
-        $rows = Db::getInstance()->executeS($sql);
         $cities = [];
-        foreach ($rows as $row) {
-            var_dump($row);
-            $cities[] = new City((int)$row['id']);
+        foreach ($citiesData as $row) {
+            $cities[] = new City($row['id_city']);
         }
-        var_dump(count($cities));
-        var_dump($cities[0]);
-        $city = new City(2);
-        var_dump($city);
         return $cities;
     }
 
@@ -118,7 +116,6 @@ class City extends ObjectModelCore {
     public static function save2Db($cityName) {
         $city = new City();
         $city->setName($cityName);
-        $city->visitedAt = date('Y-m-d H:i:s');
         $city->add();
         return $city;
     }
@@ -131,21 +128,6 @@ class City extends ObjectModelCore {
     public static function deleteDb($id) {
         $city = new City($id);
         $city->delete();
-    }
-
-    /**
-     * Update the city's visitedAt timestamp to the current time.
-     * @param int $id
-     * @throws PrestaShopExceptionCore
-     * @return void
-     */
-    public static function updateVisitedAt($id) {
-        $city = new City($id);
-        if (!ValidateCore::isLoadedObject($city)) {
-            throw new PrestaShopExceptionCore("City with ID $id not found.");
-        }
-        $city->visitedAt = date('Y-m-d H:i:s');
-        $city->update();
     }
 
     // ===========
@@ -164,16 +146,12 @@ class City extends ObjectModelCore {
             throw new PrestaShopExceptionCore("Missing or invalid city name.");
         }
 
-        if (isset($data['id']) && !is_numeric($data['id'])) {
+        if (isset($data['id_city']) && !is_numeric($data['id_city'])) {
             throw new PrestaShopExceptionCore("City ID must be numeric.");
         }
 
-        $city = new City(isset($data['id']) ? (int)$data['id'] : null);
+        $city = new City(isset($data['id_city']) ? (int)$data['id_city'] : null);
         $city->name = $data['name'];
-        if (isset($data['visitedAt'])) {
-            $city->visitedAt = $data['visitedAt'];
-        }
-
         return $city;
     }
 }

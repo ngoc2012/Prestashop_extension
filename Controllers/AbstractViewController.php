@@ -1,9 +1,10 @@
 <?php
 namespace PrestaShop\Module\Weather\Controllers;
 
+require_once __DIR__ . '/../Models/City.php';
+require_once __DIR__ . '/../Models/History.php';
+
 use PrestaShop\Module\Weather\Services\WeatherService;
-use PrestaShop\Module\Weather\Models\City;
-use PrestaShop\Module\Weather\Models\History;
 use PDOException;
 use RuntimeException;
 use InvalidArgumentException;
@@ -31,9 +32,9 @@ abstract class AbstractViewController {
 
     /**
      * Get weather data for a city using specified API.
-     * @param City $city
+     * @param \City $city
      * @param string $apiName
-     * @return History
+     * @return \History
      */
     protected static function getData($city, $apiName) {
         try {

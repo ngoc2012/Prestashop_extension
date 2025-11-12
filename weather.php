@@ -73,8 +73,6 @@ class Weather extends Module
         return parent::install() &&
             $this->registerHook('header') &&
             $this->registerHook('displayBackOfficeHeader') &&
-            // $this->registerHook('displayHome') &&
-            // $this->registerHook('displayHome') &&
             $this->registerHook('displayHome');
     }
 
@@ -247,21 +245,9 @@ class Weather extends Module
 
     public function hookDisplayHome()
     {
+        
         $tpl_path = _PS_MODULE_DIR_ . 'weather/views/templates/';
         $this->context->smarty->addTemplateDir($tpl_path);
-        $this->context->smarty->display('test.tpl');
-        // main_index();
-        // Only add city when module is fully installed
-        $city = new \PrestaShop\Module\Weather\Models\City();
-        $city->name = 'Paris_' . time();
-        $city->visitedAt = date('Y-m-d H:i:s');
-        // error_log('Adding city: ');
-        echo "Adding city: " . $city->name . "\n";
-        var_dump(($city));
-        try {
-            $city->add();
-        } catch (\Exception $e) {
-            error_log('Error adding city: ' . $e->getMessage());
-        }
+        main_index();
     }
 }
