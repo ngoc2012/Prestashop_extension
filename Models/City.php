@@ -3,34 +3,34 @@ namespace PrestaShop\Module\Weather\Models;
 
 use PrestaShopException;
 use Db;
-use ObjectModel;
+use ObjectModelCore;
 use PrestaShopExceptionCore;
 use Validate;
 use ValidateCore;
 /**
  * City model class
  */
-class City extends ObjectModel {
+class City extends ObjectModelCore {
 
 
     // =================
     // === Variables ===
     // =================
 
-    public $id_cities;
     /* @var string city name */
     public $name;
     /* @var string */
     public $visitedAt;
 
     public static $definition = [
-        'table' => 'cities',
-        'primary' => 'id_cities',
+        'table' => 'city',
+        'primary' => 'id',
         'fields' => [
-            'id_cities' => ['type' => self::TYPE_INT, 'validate' => 'isUnsignedInt', 'required' => true],
             'name' => ['type' => self::TYPE_STRING, 'validate' => 'isName', 'required' => true, 'unique' => true, 'size' => 100],
             'visitedAt' => ['type' => self::TYPE_DATE, 'validate' => 'isDate'],
         ],
+        // 👇 Important line
+        'classname' => 'City', // no namespace here!
     ];
 
 
@@ -78,7 +78,7 @@ class City extends ObjectModel {
     {
         // Sanitize input for SQL
         $name = pSQL($name);
-        $sql = 'SELECT * FROM ' . _DB_PREFIX_ . 'cities WHERE name = "' . $name . '"';
+        $sql = 'SELECT * FROM ' . _DB_PREFIX_ . 'city WHERE name = "' . $name . '"';
         $cityData = Db::getInstance()->getRow($sql);
         if (!$cityData) {
             throw new PrestaShopExceptionCore("City with name '$name' not found.");
@@ -88,12 +88,12 @@ class City extends ObjectModel {
     }
 
     /**
-     * Retrieve all cities from the database.
+     * Retrieve all city from the database.
      * @return City[]
      */
     public static function findAll($limit = 10)
     {
-        $sql = 'SELECT * FROM ' . _DB_PREFIX_ . 'cities ORDER BY visitedAt DESC';
+        $sql = 'SELECT * FROM ' . _DB_PREFIX_ . 'city ORDER BY visitedAt DESC';
         if ($limit) {
             $sql .= ' LIMIT ' . (int)$limit;
         }

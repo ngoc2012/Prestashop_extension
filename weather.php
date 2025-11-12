@@ -73,6 +73,8 @@ class Weather extends Module
         return parent::install() &&
             $this->registerHook('header') &&
             $this->registerHook('displayBackOfficeHeader') &&
+            // $this->registerHook('displayHome') &&
+            // $this->registerHook('displayHome') &&
             $this->registerHook('displayHome');
     }
 
