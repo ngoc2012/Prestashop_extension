@@ -34,7 +34,7 @@
     </div>
 
     <div class="text-center" style="margin-top: 20px;">
-        <a href="/prestashop/en/" class="btn btn-default">← Return to Home</a>
+        <a href="{$homeLink}" class="btn btn-default">← Return to Home</a>
     </div>
 
 </div>

@@ -2,7 +2,7 @@
 <div class="container" style="padding-top: 50px; padding-bottom: 50px;">
     {include file="modules/weather/views/templates/weatherPanel.tpl"}
 
-    <form method="get" action="/prestashop/en/" class="text-center" style="margin-bottom: 30px;">
+    <form method="get" action="{$homeLink}" class="text-center" style="margin-bottom: 30px;">
         <div class="form-group" style="display: inline-block; margin-right: 10px;">
             <input type="text" name="name" class="form-control" placeholder="Enter city name..." 
                 style="width: 250px; display: inline-block;" required>
@@ -26,12 +26,12 @@
 
                             <!-- Buttons on the right -->
                             <div style="display: table-cell; text-align: right; white-space: nowrap;">
-                                <a href="?name={$city->encodeCityName()}&id_city={$city->id}&api=OpenWeatherApi" 
+                                <a href="{$homeLink}?name={$city->encodeCityName()}&id_city={$city->id}&api=OpenWeatherApi" 
                                 class="btn btn-info btn-xs" style="margin-left: 5px;">
                                     Open Weather
                                 </a>
 
-                                <a href="?name={$city->encodeCityName()}&id_city={$city->id}&api=FreeWeatherApi" 
+                                <a href="{$homeLink}?name={$city->encodeCityName()}&id_city={$city->id}&api=FreeWeatherApi" 
                                 class="btn btn-success btn-xs" style="margin-left: 5px;">
                                     Free Weather
                                 </a>
