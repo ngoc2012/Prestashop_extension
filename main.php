@@ -7,5 +7,5 @@ use PrestaShop\Module\Weather\Controllers\MainController;
  * Main entry point function
  */
 function main_index() {
-    MainController::index();
+	MainController::index();
 }
