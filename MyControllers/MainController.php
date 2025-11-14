@@ -1,11 +1,11 @@
 <?php
-namespace PrestaShop\Module\Weather\Controllers;
+namespace PrestaShop\Module\Weather\MyControllers;
 
 require_once __DIR__ . '/../Models/City.php';
 require_once __DIR__ . '/../Models/History.php';
 
-use PrestaShop\Module\Weather\Controllers\CityWeatherController;
-use PrestaShop\Module\Weather\Controllers\CitiesListController;
+use PrestaShop\Module\Weather\MyControllers\CityWeatherController;
+use PrestaShop\Module\Weather\MyControllers\CitiesListController;
 use PrestaShopException;
 
 /**

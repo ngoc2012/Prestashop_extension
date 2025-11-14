@@ -40,6 +40,7 @@ class Weather extends Module
 		$this->tab = 'others';
 		$this->version = '1.0.0';
 		$this->author = 'Minh Ngoc Nguyen';
+		$this->controllers = array('example');
 		$this->need_instance = 0; //Use only if you need dynamic info (like version checks, custom status display, etc.)
 		
 		/**
@@ -51,7 +52,7 @@ class Weather extends Module
 		
 		$this->displayName = $this->l('Weather');
 		$this->description = $this->l('Display weather of some cities in the world');
-		
+	
 		$this->ps_versions_compliancy = array('min' => '1.6', 'max' => '9.0');
 	}
 	
@@ -80,10 +81,11 @@ class Weather extends Module
 	private function installTab()
 	{
 		$tab = new Tab();
-		$tab->class_name = 'AdminWeatherController';
+		$tab->class_name = 'AdminWeather';
 		$tab->module = $this->name;
 		$tab->id_parent = (int)Tab::getIdFromClassName('AdminParentModules'); // under Modules menu
 		$tab->name = array();
+		// var_dump($tab);
 		foreach (Language::getLanguages(true) as $lang) {
 			$tab->name[$lang['id_lang']] = 'My Module Menu';
 		}

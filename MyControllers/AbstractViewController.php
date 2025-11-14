@@ -1,5 +1,5 @@
 <?php
-namespace PrestaShop\Module\Weather\Controllers;
+namespace PrestaShop\Module\Weather\MyControllers;
 
 require_once __DIR__ . '/../Models/City.php';
 require_once __DIR__ . '/../Models/History.php';

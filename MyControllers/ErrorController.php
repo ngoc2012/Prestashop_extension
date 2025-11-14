@@ -1,5 +1,5 @@
 <?php
-namespace PrestaShop\Module\Weather\Controllers;
+namespace PrestaShop\Module\Weather\MyControllers;
 
 use ContextCore;
 

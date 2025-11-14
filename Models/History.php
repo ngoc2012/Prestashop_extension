@@ -63,7 +63,7 @@ class History extends ObjectModel {
 		if ($cityId <= 0) {
 			throw new PrestaShopException("Invalid city ID: $cityId");
 		}
-		$sql = 'SELECT `id_history` FROM `' . _DB_PREFIX_ . 'history` 
+		$sql = 'SELECT `id_history` FROM `' . _DB_PREFIX_ . self::$definition['table'] . '` 
  			WHERE `cityId` = ' . $cityId . ' 
  			ORDER BY `createdAt` DESC 
  			LIMIT ' . (int)$limit;
@@ -87,7 +87,7 @@ class History extends ObjectModel {
 	* @return History
 	*/
 	public static function findLast() {
-		$sql = 'SELECT `id_history` FROM `' . _DB_PREFIX_ . 'history` 
+		$sql = 'SELECT `id_history` FROM `' . _DB_PREFIX_ . self::$definition['table'] . '` 
 			ORDER BY `createdAt` DESC';
 		$row = Db::getInstance()->getRow($sql);
 		if (!$row) {

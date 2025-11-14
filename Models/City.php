@@ -64,7 +64,7 @@ class City extends ObjectModel {
 		{
 			// Sanitize input for SQL
 			$name = pSQL($name);
-			$sql = 'SELECT * FROM ' . _DB_PREFIX_ . 'city WHERE name = "' . $name . '"';
+			$sql = 'SELECT * FROM ' . _DB_PREFIX_ . self::$definition['table'] . ' WHERE name = "' . $name . '"';
 			$cityData = Db::getInstance()->getRow($sql);
 			if (!$cityData) {
 				throw new PrestaShopException("City with name '$name' not found.");
@@ -82,7 +82,7 @@ class City extends ObjectModel {
 			$limit = (int)$limit;
 			$sql = "
 				SELECT c.*
-				FROM `" . _DB_PREFIX_ . "city` c
+				FROM `" . _DB_PREFIX_ . self::$definition['table'] . "` c
 				LEFT JOIN `" . _DB_PREFIX_ . "history` h ON h.cityId = c.id_city
 				GROUP BY c.id_city
 				ORDER BY MAX(h.createdAt) DESC, c.id_city ASC
