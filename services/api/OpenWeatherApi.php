@@ -1,9 +1,9 @@
 <?php
-namespace PrestaShop\Module\Weather\Services\API;
+namespace PrestaShop\Module\Weather\services\api;
 
-require_once __DIR__ . "/../../Models/City.php";
+require_once __DIR__ . "/../../models/City.php";
 
-use PrestaShop\Module\Weather\Services\API\AbstractWeatherApi;
+use PrestaShop\Module\Weather\services\api\AbstractWeatherApi;
 use RuntimeException;
 use ConfigurationCore;
 

@@ -1,4 +1,3 @@
-
 <div class="container" style="padding-top: 50px; padding-bottom: 50px;">
     {include file="modules/weather/views/templates/weatherPanel.tpl"}
 
@@ -15,33 +14,79 @@
         </button>
     </form>
 
-    <div class="panel panel-default" style="background-color: transparent;border: none;">
-        <div class="panel-body" style="padding: 0;">
-            <ul class="list-group">
-                {foreach from=$cities item=city}
-                    <li class="list-group-item" style="background-color: #f8f9fa; color:#343a40; border: 1px solid #6c757d;">
-                        <div style="display: table; width: 100%;">
-                            <!-- Name on the left -->
-                            <span style="display: table-cell; font-weight: bold;">{$city->name}</span>
+    <!-- ========================================== -->
+    <!--         BOOTSTRAP CAROUSEL START           -->
+    <!-- ========================================== -->
 
-                            <!-- Buttons on the right -->
-                            <div style="display: table-cell; text-align: right; white-space: nowrap;">
-                                <a href="{$homeLink}?name={$city->encodeCityName()}&id_city={$city->id}&api=OpenWeatherApi" 
-                                class="btn btn-info btn-xs" style="margin-left: 5px;">
-                                    Open Weather
-                                </a>
+    <div id="cityWeatherCarousel" class="carousel slide" data-ride="carousel" style="margin-bottom: 40px;">
 
-                                <a href="{$homeLink}?name={$city->encodeCityName()}&id_city={$city->id}&api=FreeWeatherApi" 
-                                class="btn btn-success btn-xs" style="margin-left: 5px;">
-                                    Free Weather
-                                </a>
-                            </div>
+        <!-- Indicators -->
+        <ol class="carousel-indicators">
+            {foreach from=$cities item=city name=cityLoop}
+                <li data-target="#cityWeatherCarousel"
+                    data-slide-to="{$smarty.foreach.cityLoop.index}"
+                    class="{if $smarty.foreach.cityLoop.first}active{/if}">
+                </li>
+            {/foreach}
+        </ol>
+
+        <!-- Slides -->
+        <div class="carousel-inner" role="listbox">
+
+            {foreach from=$cities item=city name=cityLoop}
+            <div class="item {if $smarty.foreach.cityLoop.first}active{/if}">
+                <a href="{$homeLink}?name={$city->encodeCityName()}&id_city={$city->id}">
+                    <div class="cw-slide text-center" style="padding:40px;">
+
+                        <h3 style="margin-bottom: 15px;">
+                            {$city->name}
+                        </h3>
+
+                        <!-- temperature if available -->
+                        {if isset($city->temperature)}
+                            <p style="font-size:22px; font-weight:bold;">
+                                {$city->temperature}°C
+                            </p>
+                        {else}
+                            <p style="font-size:16px; color:#888;">
+                                No temperature yet
+                            </p>
+                        {/if}
+
+                        <!-- Buttons -->
+                        <div style="margin-top: 15px;">
+                            <a href="{$homeLink}?name={$city->encodeCityName()}&id_city={$city->id}&api=OpenWeatherApi"
+                                class="btn btn-info btn-xs" style="margin-right: 5px;">
+                                Open Weather
+                            </a>
+
+                            <a href="{$homeLink}?name={$city->encodeCityName()}&id_city={$city->id}&api=FreeWeatherApi"
+                                class="btn btn-success btn-xs">
+                                Free Weather
+                            </a>
                         </div>
-                    </li>
-                {/foreach}
-            </ul>
+
+                    </div>
+                </a>
+            </div>
+            {/foreach}
+
         </div>
+
+        <!-- Controls -->
+        <a class="left carousel-control" href="#cityWeatherCarousel" role="button" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+        </a>
+
+        <a class="right carousel-control" href="#cityWeatherCarousel" role="button" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+        </a>
     </div>
+
+    <!-- ========================================== -->
+    <!--           BOOTSTRAP CAROUSEL END           -->
+    <!-- ========================================== -->
+
 
     <div class="text-center" style="margin-top: 30px;">
         <p style="color: #6c757d;">Select a city to view the latest weather 🌦️</p>

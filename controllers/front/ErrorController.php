@@ -1,5 +1,5 @@
 <?php
-namespace PrestaShop\Module\Weather\MyControllers;
+namespace PrestaShop\Module\Weather\controllers\front;
 
 use ContextCore;
 
@@ -22,6 +22,6 @@ class ErrorController {
 		$context = ContextCore::getContext();
 		$context->smarty->assign('errorMessage', $message);
 		$context->smarty->assign('homeLink', $context->link->getPageLink('index'));
-		$context->smarty->display('error.tpl');
+		$context->smarty->display('front/error.tpl');
 	}
 }

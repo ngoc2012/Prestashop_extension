@@ -1,11 +1,11 @@
 <?php
-namespace PrestaShop\Module\Weather\MyControllers;
+namespace PrestaShop\Module\Weather\controllers\front;
 
-require_once __DIR__ . '/../Models/City.php';
-require_once __DIR__ . '/../Models/History.php';
+require_once __DIR__ . '/../../models/City.php';
+require_once __DIR__ . '/../../models/History.php';
 
 use ContextCore;
-use PrestaShop\Module\Weather\MyControllers\AbstractViewController;
+use PrestaShop\Module\Weather\controllers\front\AbstractViewController;
 use PDOException;
 use InvalidArgumentException;
 use PrestaShopException;
@@ -51,10 +51,17 @@ class CitiesListController extends AbstractViewController {
 		}
 		$history = self::getData($lastCity, $apiName);
 		$context = ContextCore::getContext();
-		$context->smarty->assign("city", $lastCity);
-		$context->smarty->assign("history", $history);
-		$context->smarty->assign("cities", $cities);
-		$context->smarty->assign('homeLink', $context->link->getPageLink('index'));
+		// $context->smarty->assign("city", $lastCity);
+		// $context->smarty->assign("history", $history);
+		// $context->smarty->assign("cities", $cities);
+		// $context->smarty->assign('homeLink', $context->link->getPageLink('index'));
+		// $context->smarty->display("front/citiesList.tpl");
+		$context->smarty->assign(array(
+			"city"     => $lastCity,
+			"history"  => $history,
+			"cities"   => $cities,
+			"homeLink" => $context->link->getPageLink('index'),
+		));
 		$context->smarty->display("citiesList.tpl");
 	}
 }

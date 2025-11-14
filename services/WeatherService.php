@@ -1,11 +1,11 @@
 <?php
-namespace PrestaShop\Module\Weather\Services;
+namespace PrestaShop\Module\Weather\services;
 
-require_once __DIR__ . '/../Models/City.php';
-require_once __DIR__ . '/../Models/History.php';
+require_once __DIR__ . '/../models/City.php';
+require_once __DIR__ . '/../models/History.php';
 
-use PrestaShop\Module\Weather\Services\API\FreeWeatherApi;
-use PrestaShop\Module\Weather\Services\API\OpenWeatherApi;
+use PrestaShop\Module\Weather\services\api\FreeWeatherApi;
+use PrestaShop\Module\Weather\services\api\OpenWeatherApi;
 
 /**
 * WeatherService class to fetch weather data

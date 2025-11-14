@@ -1,7 +1,7 @@
 <?php
-namespace PrestaShop\Module\Weather\Services\API;
+namespace PrestaShop\Module\Weather\services\api;
 
-require_once __DIR__ . "/../../Models/City.php";
+require_once __DIR__ . "/../../models/City.php";
 
 /**
 * Base class for all WeatherApi type

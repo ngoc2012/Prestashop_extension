@@ -30,8 +30,7 @@ if (!defined('_PS_VERSION_')) {
 	exit;
 }
 
-class Weather extends Module
-{
+class Weather extends Module {
 	protected $config_form = false;
 	
 	public function __construct()
@@ -60,8 +59,7 @@ class Weather extends Module
 	* Don't forget to create update methods if needed:
 	* http://doc.prestashop.com/display/PS16/Enabling+the+Auto-Update
 	*/
-	public function install()
-	{
+	public function install() {
 		
 		include(dirname(__FILE__).'/sql/install.php');
 		
@@ -78,8 +76,7 @@ class Weather extends Module
 		$this->registerHook('displayHome');
 	}
 	
-	private function installTab()
-	{
+	private function installTab() {
 		$tab = new Tab();
 		$tab->class_name = 'AdminWeather';
 		$tab->module = $this->name;
@@ -87,14 +84,13 @@ class Weather extends Module
 		$tab->name = array();
 		// var_dump($tab);
 		foreach (Language::getLanguages(true) as $lang) {
-			$tab->name[$lang['id_lang']] = 'My Module Menu';
+			$tab->name[$lang['id_lang']] = 'Weather Management';
 		}
 
 		return $tab->add();
 	}
 
-	public function uninstall()
-	{
+	public function uninstall() {
 		//Configuration::deleteByName('WEATHER_LIVE_MODE');
 		
 		include(dirname(__FILE__).'/sql/uninstall.php');
@@ -102,8 +98,7 @@ class Weather extends Module
 		return parent::uninstall() && $this->uninstallTab();
 	}
 
-	private function uninstallTab()
-	{
+	private function uninstallTab() {
 		$id_tab = Tab::getIdFromClassName('AdminWeather');
 		if ($id_tab) {
 			$tab = new Tab($id_tab);
@@ -115,8 +110,7 @@ class Weather extends Module
 	/**
 	* Load the configuration form
 	*/
-	public function getContent()
-	{
+	public function getContent() {
 		/**
 		* If values have been submitted in the form, process.
 		*/
@@ -134,8 +128,7 @@ class Weather extends Module
 	/**
 	* Create the form that will be displayed in the configuration of your module.
 	*/
-	protected function renderForm()
-	{
+	protected function renderForm() {
 		$helper = new HelperForm();
 		
 		$helper->show_toolbar = false;
@@ -162,8 +155,7 @@ class Weather extends Module
 	/**
 	* Create the structure of your form.
 	*/
-	protected function getConfigForm()
-	{
+	protected function getConfigForm() {
 		return array(
 			'form' => array(
 				'legend' => array(
@@ -225,8 +217,7 @@ class Weather extends Module
 	/**
 	* Set values for the inputs.
 	*/
-	protected function getConfigFormValues()
-	{
+	protected function getConfigFormValues() {
 		return array(
 			'WEATHER_ACCOUNT_EMAIL' => ConfigurationCore::get('WEATHER_ACCOUNT_EMAIL', 'contact@prestashop.com'),
 			'WEATHER_ACCOUNT_PASSWORD' => ConfigurationCore::get('WEATHER_ACCOUNT_PASSWORD', null),
@@ -241,8 +232,7 @@ class Weather extends Module
 	/**
 	* Save form data.
 	*/
-	protected function postProcess()
-	{
+	protected function postProcess() {
 		$form_values = $this->getConfigFormValues();
 		
 		foreach (array_keys($form_values) as $key) {
@@ -253,8 +243,7 @@ class Weather extends Module
 	/**
 	* Add the CSS & JavaScript files you want to be loaded in the BO.
 	*/
-	public function hookDisplayBackOfficeHeader()
-	{
+	public function hookDisplayBackOfficeHeader() {
 		if (Tools::getValue('configure') == $this->name) {
 			$this->context->controller->addJS($this->_path.'views/js/back.js');
 			$this->context->controller->addCSS($this->_path.'views/css/back.css');
@@ -264,14 +253,12 @@ class Weather extends Module
 	/**
 	* Add the CSS & JavaScript files you want to be added on the FO.
 	*/
-	public function hookHeader()
-	{
+	public function hookHeader() {
 		$this->context->controller->addJS($this->_path.'/views/js/front.js');
 		$this->context->controller->addCSS($this->_path.'/views/css/front.css');
 	}
 	
-	public function hookDisplayHome()
-	{
+	public function hookDisplayHome() {
 		
 		$tpl_path = _PS_MODULE_DIR_ . 'weather/views/templates/';
 		$this->context->smarty->addTemplateDir($tpl_path);

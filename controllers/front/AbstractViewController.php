@@ -1,10 +1,10 @@
 <?php
-namespace PrestaShop\Module\Weather\MyControllers;
+namespace PrestaShop\Module\Weather\controllers\front;
 
-require_once __DIR__ . '/../classes/City.php';
-require_once __DIR__ . '/../classes/History.php';
+require_once __DIR__ . '/../../models/City.php';
+require_once __DIR__ . '/../../models/History.php';
 
-use PrestaShop\Module\Weather\Services\WeatherService;
+use PrestaShop\Module\Weather\services\WeatherService;
 use RuntimeException;
 use Exception;
 
@@ -13,6 +13,15 @@ use Exception;
 */
 abstract class AbstractViewController {
 	
+	protected $frontController;
+
+	/**
+	 * Constructor for AbstractViewController.
+	 * @param FrontController $frontController
+	 */
+	public function __construct($frontController = null) {
+		$this->frontController = $frontController;
+	}
 	
 	// ========================
 	// === Abstract Methods ===

@@ -1,10 +1,10 @@
 <?php
-namespace PrestaShop\Module\Weather\MyControllers;
+namespace PrestaShop\Module\Weather\controllers\front;
 
-require_once __DIR__ . '/../Models/City.php';
-require_once __DIR__ . '/../Models/History.php';
+require_once __DIR__ . '/../../models/City.php';
+require_once __DIR__ . '/../../models/History.php';
 
-use PrestaShop\Module\Weather\MyControllers\AbstractViewController;
+use PrestaShop\Module\Weather\controllers\front\AbstractViewController;
 use ContextCore;
 
 /**
@@ -65,6 +65,6 @@ class CityWeatherController extends AbstractViewController {
 		$context->smarty->assign('city', $this->city);
 		$context->smarty->assign('history', $histories[0]);
 		$context->smarty->assign('homeLink', $context->link->getPageLink('index'));
-		$context->smarty->display('cityWeather.tpl');
+		$context->smarty->display('front/cityWeather.tpl');
 	}
 }
