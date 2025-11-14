@@ -1,9 +1,5 @@
 <?php
 
-if (!defined('_PS_VERSION_')) {
-    exit;
-}
-
 class AdminWeatherController extends ModuleAdminController
 {
     public function __construct()
@@ -15,10 +11,6 @@ class AdminWeatherController extends ModuleAdminController
 
     public function initContent()
     {
-        parent::initContent();
-        $this->context->smarty->assign(array(
-            'my_message' => 'Hello, this is my custom admin page!'
-        ));
-        $this->setTemplate('my_template.tpl'); // Smarty template in views/templates/admin/
+        
     }
 }

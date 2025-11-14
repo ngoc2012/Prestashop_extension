@@ -104,7 +104,7 @@ class Weather extends Module
 
 	private function uninstallTab()
 	{
-		$id_tab = Tab::getIdFromClassName('AdminWeatherController');
+		$id_tab = Tab::getIdFromClassName('AdminWeather');
 		if ($id_tab) {
 			$tab = new Tab($id_tab);
 			return $tab->delete();

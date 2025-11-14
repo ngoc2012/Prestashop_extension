@@ -1,8 +1,8 @@
 <?php
 namespace PrestaShop\Module\Weather\MyControllers;
 
-require_once __DIR__ . '/../Models/City.php';
-require_once __DIR__ . '/../Models/History.php';
+require_once __DIR__ . '/../classes/City.php';
+require_once __DIR__ . '/../classes/History.php';
 
 use PrestaShop\Module\Weather\Services\WeatherService;
 use RuntimeException;
