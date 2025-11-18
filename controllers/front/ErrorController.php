@@ -7,12 +7,12 @@ use ContextCore;
 * Controller for handling errors pages
 */
 class ErrorController {
-	
-	
+
+
 	// =========================
 	// === Public Methods ======
 	// =========================
-	
+
 	/**
 	* Display an error message.
 	* @param string $message

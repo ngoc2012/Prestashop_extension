@@ -6,17 +6,17 @@ require_once "History.php";
 * City model class
 */
 class City extends ObjectModel {
-	
-	
+
+
 	// =================
 	// === Variables ===
 	// =================
-	
+
 	public $id;
 	public $id_city;
 	/* @var string city name */
 	public $name;
-	
+
 	public static $definition = [
 		'table' => 'city',
 		'primary' => 'id_city',
@@ -25,12 +25,12 @@ class City extends ObjectModel {
 			'name' => ['type' => self::TYPE_STRING, 'validate' => 'isName', 'required' => true, 'unique' => true, 'size' => 100]
 			]
 		];
-		
-		
+
+
 		// ======================
 		// === Public methods ===
 		// ======================
-		
+
 		/**
 		* Encode the city name for URL usage.
 		*
@@ -39,21 +39,21 @@ class City extends ObjectModel {
 		public function encodeCityName() {
 			return urlencode($this->name);
 		}
-		
-		
+
+
 		// ===========================
 		// === Data access methods ===
 		// ===========================
-		
+
 		/**
 		* Retrieve all history records for this city.
-		* 
+		*
 		* @return History[]
 		*/
 		public function getHistories() {
 			return History::findAllByCityId($this->id);
 		}
-		
+
 		/**
 		* Retrieve a city by its name.
 		* @param string $name
@@ -69,10 +69,10 @@ class City extends ObjectModel {
 			if (!$cityData) {
 				throw new PrestaShopException("City with name '$name' not found.");
 			}
-			
+
 			return new City($cityData['id_city']);
 		}
-		
+
 		/**
 		* Retrieve the most recently visited cities.
 		* @param int $limit
@@ -98,6 +98,5 @@ class City extends ObjectModel {
 			}
 			return $cities;
 		}
-		
+
 	}
-	

@@ -12,36 +12,41 @@ use PrestaShopException;
 * Main page: entry point for all pages
 */
 class MainController {
-	
-	
+
+
 	// =========================
 	// === Public Methods ======
 	// =========================
-	
+
 	/**
 	* Main entry point of the application.
 	*/
-	public static function index() {
-		if (isset($_GET["name"])) {
-			if (isset($_GET['id_city'])) {
-				$city = new \City(intval($_GET['id_city']));
-				if (!$city || $city->name !== trim($_GET['name'])) {
-					ErrorController::init("City ID and name do not match.");
+	public static function index($methodName = 'post') {
+		if ($methodName == "get") {
+			$method = $_GET;
+		} else {
+			$method = $_POST;
+		}
+		if (isset($method["name"])) {
+			if (isset($method['id_city'])) {
+				$city = new \City(intval($method['id_city']));
+				if (!$city || $city->name !== trim($method['name'])) {
+					(new ErrorController())->init("City ID and name do not match.");
 					exit;
 				}
 			} else {
 				try {
-					$city = \City::findByName($_GET['name']);
+					$city = \City::findByName($method['name']);
 				} catch (PrestaShopException $e) {
 					$city = new \City();
-					$city->name = trim($_GET['name']);
+					$city->name = trim($method['name']);
 					$city->add();
 				}
 			}
-			$controller = new CityWeatherController($city, trim($_GET['api']));
+			$controller = new CityWeatherController($city, trim($method['api']));
 		} else {
-			$controller = new CitiesListController();
+			$controller = new CitiesListController($methodName);
 		}
-		$controller->init();
-	}   
+		$controller->initContent();
+	}
 }

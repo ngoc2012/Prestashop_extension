@@ -6,6 +6,6 @@ use PrestaShop\Module\Weather\controllers\front\MainController;
 /**
  * Main entry point function
  */
-function main_index() {
-	MainController::index();
+function mainIndex() {
+	MainController::index('get');
 }

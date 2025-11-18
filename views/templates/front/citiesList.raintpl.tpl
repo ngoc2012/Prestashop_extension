@@ -1,4 +1,4 @@
-{include file="weatherPanel.tpl"}
+{include="weatherPanel.raintpl"}
 
 <form method="{$method}" action="index.php" class="text-center" style="margin-bottom: 30px;">
 	<div class="form-group" style="display: inline-block; margin-right: 10px;">
@@ -16,36 +16,36 @@
 <div class="panel panel-default" style="background-color: transparent;border: none;">
 	<div class="panel-body" style="padding: 0;">
 		<ul class="list-group">
-			{foreach from=$cities item=city}
+			{loop="cities"}
 			<li class="list-group-item" style="background-color: #f8f9fa; color : #343a40;border: 1px solid #6c757d;">
 				<div style="display: table; width: 100%;">
 					<!-- Name on the left -->
-					<span style="display: table-cell; font-weight: bold;">{$city->getName()}</span>
+					<span style="display: table-cell; font-weight: bold;">{$value->getName()}</span>
 					<!-- Buttons on the right -->
 					<div style="display: table-cell; text-align: right; white-space: nowrap;">
-						{if $method == 'post'}
-						
+						{if="$method=='post'"}
+
 						<form method="post" action="index.php" class="form-inline" style="display:inline-block; margin-right:5px;">
-							<input type="hidden" name="name" value="{$city->getName()}">
+							<input type="hidden" name="name" value="{$value->getName()}">
 							<input type="hidden" name="api" value="OpenWeatherApi">
-							<input type="hidden" name="id" value="{$city->getId()}">
+							<input type="hidden" name="id" value="{$value->getId()}">
 							<button type="submit" class="btn btn-info btn-xs">Open Weather</button>
 						</form>
-						
+
 						<form method="post" action="index.php" class="form-inline" style="display:inline-block;">
-							<input type="hidden" name="name" value="{$city->getName()}">
+							<input type="hidden" name="name" value="{$value->getName()}">
 							<input type="hidden" name="api" value="FreeWeatherApi">
-							<input type="hidden" name="id" value="{$city->getId()}">
+							<input type="hidden" name="id" value="{$value->getId()}">
 							<button type="submit" class="btn btn-success btn-xs">Free Weather</button>
 						</form>
 						
 						{else} 
 						
-						<a href="index.php?name={$city->encodeCityName()}&id={$city->getId()}&api=OpenWeatherApi" 
+						<a href="index.php?name={$value->encodeCityName()}&id={$value->getId()}&api=OpenWeatherApi" 
 							class="btn btn-info btn-xs" style="margin-left: 5px;">
 							Open Weather
 						</a>
-						<a href="index.php?name={$city->encodeCityName()}&id={$city->getId()}&api=FreeWeatherApi" 
+						<a href="index.php?name={$value->encodeCityName()}&id={$value->getId()}&api=FreeWeatherApi" 
 							class="btn btn-success btn-xs" style="margin-left: 5px;">
 							Free Weather
 						</a>
@@ -54,7 +54,7 @@
 					</div>
 				</div>
 			</li>
-			{/foreach}
+			{/loop}
 		</ul>
 	</div>
 </div>

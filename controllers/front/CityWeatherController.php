@@ -4,29 +4,29 @@ namespace PrestaShop\Module\Weather\controllers\front;
 require_once __DIR__ . '/../../models/City.php';
 require_once __DIR__ . '/../../models/History.php';
 
-use PrestaShop\Module\Weather\controllers\front\AbstractViewController;
-use ContextCore;
+use PrestaShop\Module\Weather\controllers\front\ViewController;
+use PrestaShop\Module\Weather\controllers\front\ErrorController;
 
 /**
 * Controller for the city weather page
 */
-class CityWeatherController extends AbstractViewController {
-	
-	
+class CityWeatherController extends ViewController {
+
+
 	// =================
 	// === Variables ===
 	// =================
-	
+
 	/* @var City */
 	public $city;
 	/* @var string */
 	public $apiName;
-	
-	
+
+
 	// ===================
 	// === Constructor ===
 	// ===================
-	
+
 	/**
 	* Constructor for the CityWeatherController.
 	* @param string $viewType
@@ -37,18 +37,19 @@ class CityWeatherController extends AbstractViewController {
 		$this->city = $city;
 		$this->apiName = $apiName;
 	}
-	
-	
+
+
 	// ======================
 	// === Public Methods ===
 	// ======================
-	
+
 	/**
 	* Get the weather data for a specific city and display it.
-	* 
+	*
 	* @return void
 	*/
-	public function init() {
+	public function initContent() {
+		parent::initContent();
 		try {
 			$this->getData($this->city, $this->apiName);
 		} catch (\RuntimeException $e) {
@@ -60,11 +61,12 @@ class CityWeatherController extends AbstractViewController {
 			ErrorController::init('No weather history found for this city.');
 			exit;
 		}
-		$context = ContextCore::getContext();
-		$context->smarty->assign('histories', $histories);
-		$context->smarty->assign('city', $this->city);
-		$context->smarty->assign('history', $histories[0]);
-		$context->smarty->assign('homeLink', $context->link->getPageLink('index'));
-		$context->smarty->display('front/cityWeather.tpl');
+		$this->context->smarty->assign(array(
+			'histories' => $histories,
+			'city' => $this->city,
+			'history' => $histories[0],
+			'homeLink' => $this->context->link->getPageLink('index'),
+		));
+		$this->setTemplate('module:weather/views/templates/front/cityWeather.tpl');
 	}
 }
