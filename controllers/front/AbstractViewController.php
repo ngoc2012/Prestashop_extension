@@ -15,6 +15,7 @@ abstract class AbstractViewController {
 	
 	protected $frontController;
 
+	
 	/**
 	 * Constructor for AbstractViewController.
 	 * @param FrontController $frontController
