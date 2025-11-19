@@ -6,15 +6,15 @@ require_once __DIR__ . '/../../models/History.php';
 
 use PrestaShop\Module\Weather\services\WeatherService;
 use PrestaShop\Module\Weather\controllers\front\ErrorController;
-
+use Certideal\PrestashopHelpers\CertidealAbstractModuleFrontController;
 /**
 * Base controller class to handle view rendering
 */
-class ViewController extends \ModuleFrontController {
+class ViewController extends CertidealAbstractModuleFrontController {
 
-	public function initContent() {
-		parent::initContent();
-	}
+	// public function initContent() {
+	// 	parent::initContent();
+	// }
 
 	// =========================
 	// === Protected Methods ===

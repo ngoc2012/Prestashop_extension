@@ -55,6 +55,10 @@ class CitiesListController extends ViewController {
 			exit;
 		}
 		$history = self::getData($lastCity, $apiName);
+		if (empty($this->context->smarty)) {
+			return;
+		}
+		error_log('Rendering CitiesListController with method: ' . $this->methodName);
 		$this->context->smarty->assign(array(
 			'method'   => $this->methodName,
 			"city"     => $lastCity,
@@ -64,5 +68,15 @@ class CitiesListController extends ViewController {
 		));
 
 		$this->setTemplate('module:weather/views/templates/front/citiesList.tpl');
+
+		// $context = \ContextCore::getContext();
+		// $context->smarty->assign(array(
+		// 	'method'   => $this->methodName,
+		// 	"city"     => $lastCity,
+		// 	"history"  => $history,
+		// 	"cities"   => $cities,
+		// 	"homeLink" => $context->link->getPageLink('index'),
+		// ));
+		// $context->smarty->display('front/citiesList.tpl');
 	}
 }
