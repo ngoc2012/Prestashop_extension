@@ -1,0 +1,62 @@
+<?php
+
+/**
+ * Controller for the main page: Listing all the cities
+ */
+class WeatherCitiesListModuleFrontController extends \WeatherViewModuleFrontController {
+
+	private $methodName;
+
+	public function __construct($methodName = 'post') {
+		parent::__construct();
+		$this->methodName = $methodName;
+	}
+
+	// =========================
+	// === Public Methods ======
+	// =========================
+
+	/**
+	 * Display the list of cities.
+	 *
+	 * @return void
+	 */
+	public function initContent() {
+		$this->context = ContextCore::getContext();
+		parent::initContent();
+		$apiName = 'OpenWeatherMap';
+		try {
+			$cities = \City::findLastVisitedCities(10);
+			if (count($cities) === 0) {
+				$lastCity = new \City();
+				$lastCity->name = 'Paris';
+				$lastCity->add();
+			} else {
+				try {
+					$lastHistory = \History::findLast();
+					$apiName = $lastHistory->api;
+					$lastCityId = $lastHistory->cityId;
+				} catch (\PrestaShopException $e) {
+					$lastCityId = $cities[0]->id_city;
+				}
+				$lastCity = new \City($lastCityId);
+			}
+		} catch (\PDOException $e) {
+			(new WeatherErrorModuleFrontController())->initContent($e->getMessage());
+			exit;
+		} catch (\InvalidArgumentException $e) {
+			(new WeatherErrorModuleFrontController())->initContent($e->getMessage());
+			exit;
+		}
+		$history = self::getData($lastCity, $apiName);
+		$this->context->smarty->assign(array(
+			'method'   => $this->methodName,
+			"city"     => $lastCity,
+			"history"  => $history,
+			"cities"   => $cities,
+			"homeLink" => $this->context->link->getPageLink('index'),
+		));
+
+		$this->setTemplate('module:weather/views/templates/front/citiesList.tpl');
+	}
+}
