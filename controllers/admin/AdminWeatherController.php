@@ -1,19 +1,24 @@
 <?php
 
-require_once dirname(__FILE__).'/../../models/City.php';
+require_once dirname(__FILE__).'/../../classes/City.php';
 
-class AdminWeatherController extends ModuleAdminController
-{
+class AdminWeatherController extends ModuleAdminController {
+
+
+	// ===================
+	// === Constructor ===
+	// ===================
+
 	public function __construct() {
 		$this->bootstrap = true; // Enable PrestaShop 1.6 bootstrap styling
-		
+
 		$this->table = 'city';
 		$this->className = 'City';
 		$this->identifier = 'id_city';
 		$this->lang = false;
-		
+
 		parent::__construct();
-		
+
 		// Define the columns for HelperList
 		$this->fields_list = [
 			'id_city' => [
@@ -25,29 +30,29 @@ class AdminWeatherController extends ModuleAdminController
 				'title' => $this->l('City Name'),
 			],
 		];
-		
+
 		// Row actions
 		$this->addRowAction('edit');
 		$this->addRowAction('delete');
-		
+
 		// Toolbar button
 		$this->toolbar_title = $this->l('City Management');
 	}
-	
+
 	public function initPageHeaderToolbar() {
 		parent::initPageHeaderToolbar();
-		
+
 		$this->page_header_toolbar_btn['new_city'] = [
 			'href' => self::$currentIndex.'&addcity&token='.$this->token,
 			'desc' => $this->l('Add new city'),
 			'icon' => 'process-icon-new'
 		];
 	}
-	
+
 	public function renderList() {
 		return parent::renderList();
 	}
-	
+
 	public function renderForm() {
 		// Form fields
 		$this->fields_form = [
@@ -68,8 +73,7 @@ class AdminWeatherController extends ModuleAdminController
 				'class' => 'btn btn-primary'
 				]
 			];
-			
+
 			return parent::renderForm();
 		}
 	}
-	

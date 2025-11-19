@@ -257,12 +257,10 @@ class Weather extends Module {
 	}
 
 	public function hookDisplayHome() {
-		require_once __DIR__.'/controllers/front/main.php';
+		require_once __DIR__.'/controllers/CitiesList.php';
 		$tplPath = _PS_MODULE_DIR_ . 'weather/views/templates/';
 		$this->context->smarty->addTemplateDir($tplPath);
-		$weatherController = new \WeatherMainModuleFrontController('get');
-		$weatherController->module = $this;
-		$weatherController->initContent('get');
-		return $weatherController->run();
+		$weatherController = new CitiesList('post');
+		$weatherController->initContent();
 	}
 }

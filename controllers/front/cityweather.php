@@ -1,36 +1,29 @@
 <?php
 
+// http://localhost/prestashop/index.php?fc=module&module=weather&controller=cityweather
+
+require_once __DIR__ . '/../../services/WeatherService.php';
+require_once __DIR__ . '/../ErrorController.php';
+require_once __DIR__ . '/../TraitWeatherView.php';
+
 /**
 * Controller for the city weather page
 */
-class WeatherCityWeatherModuleFrontController extends WeatherViewModuleFrontController {
+class weatherCityWeatherModuleFrontController extends \ModuleFrontController {
+
+	use TraitWeatherView;
 
 
 	// =================
 	// === Variables ===
 	// =================
 
+	public $display_column_left = false;  // hides left column
+	public $display_column_right = false;  // hides right column
 	/* @var City */
-	public $city;
+	private $city;
 	/* @var string */
-	public $apiName;
-
-
-	// ===================
-	// === Constructor ===
-	// ===================
-
-	/**
-	* Constructor for the CityWeatherController.
-	* @param string $viewType
-	* @param \City $city
-	* @param string $apiName
-	*/
-	public function __construct(\City $city, $apiName) {
-		parent::__construct();
-		$this->city = $city;
-		$this->apiName = $apiName;
-	}
+	private $apiName;
 
 
 	// ======================
@@ -43,31 +36,63 @@ class WeatherCityWeatherModuleFrontController extends WeatherViewModuleFrontCont
 	* @return void
 	*/
 	public function initContent() {
-		$this->context = \ContextCore::getContext();
 		parent::initContent();
+		$this->checkInput();
 		try {
 			$this->getData($this->city, $this->apiName);
 		} catch (\RuntimeException $e) {
-			(new WeatherErrorModuleFrontController())->initContent($e->getMessage());
+			ErrorController::initContent($e->getMessage());
 			exit;
 		}
 		$histories = $this->city->getHistories();
 		if (count($histories) == 0) {
-			(new WeatherErrorModuleFrontController())->initContent('No history found for this city.');
+			ErrorController::initContent('No history found for this city.');
 			exit;
 		}
-		// $context = ContextCore::getContext();
-		// $context->smarty->assign('histories', $histories);
-		// $context->smarty->assign('city', $this->city);
-		// $context->smarty->assign('history', $histories[0]);
-		// $context->smarty->assign('homeLink', $context->link->getPageLink('index'));
-		// $context->smarty->display('front/cityWeather.tpl');
 		$this->context->smarty->assign(array(
 			'histories' => $histories,
 			'city' => $this->city,
 			'history' => $histories[0],
 			'homeLink' => $this->context->link->getPageLink('index'),
 		));
-		$this->setTemplate('module:weather/views/templates/front/cityWeather.tpl');
+		// $this->setTemplate(_PS_MODULE_DIR_ . 'weather/views/templates/front/cityweather.tpl');
+		$this->setTemplate('cityweather.tpl');
+	}
+
+	private function checkInput() {
+		$this->context = \ContextCore::getContext();
+
+		$methodName = isset($_GET['method']) ? $_GET['method'] : 'post';
+
+		if ($methodName == "get") {
+			$method = $_GET;
+		} else {
+			$method = $_POST;
+		}
+		if (isset($method["name"])) {
+			if (isset($method['id_city'])) {
+				$this->city = new \City(intval($method['id_city']));
+				if (!$this->city || $this->city->name !== trim($method['name'])) {
+					ErrorController::initContent("City ID and name do not match.");
+					exit;
+				}
+			} else {
+				try {
+					$this->city = \City::findByName($method['name']);
+				} catch (\PrestaShopException $e) {
+					$this->city = new \City();
+					$this->city->name = trim($method['name']);
+					$this->city->add();
+				}
+			}
+			if (isset($method['api'])) {
+				$this->apiName = trim($method['api']);
+			} else {
+				$this->apiName = "OpenWeatherApi";
+			}
+		} else {
+			ErrorController::initContent("City name is required.");
+			exit;
+		}
 	}
 }

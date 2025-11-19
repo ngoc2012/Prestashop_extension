@@ -1,11 +1,9 @@
 <?php
-namespace PrestaShop\Module\Weather\services;
 
-require_once __DIR__ . '/../models/City.php';
-require_once __DIR__ . '/../models/History.php';
-
-use PrestaShop\Module\Weather\services\api\FreeWeatherApi;
-use PrestaShop\Module\Weather\services\api\OpenWeatherApi;
+require_once __DIR__ . '/../classes/City.php';
+require_once __DIR__ . '/../classes/History.php';
+require_once __DIR__ . '/api/FreeWeatherApi.php';
+require_once __DIR__ . '/api/OpenWeatherApi.php';
 
 /**
 * WeatherService class to fetch weather data
@@ -27,10 +25,10 @@ class WeatherService {
 	public static function getData($city, $apiName = null) {
 		switch ($apiName) {
 			case 'FreeWeatherApi':
-				$api = new FreeWeatherApi();
+				$api = new \FreeWeatherApi();
 				break;
 				default:
-				$api = new OpenWeatherApi();
+				$api = new \OpenWeatherApi();
 				break;
 			}
 			list($temperature, $humidity) = $api->fetchWeather($city);

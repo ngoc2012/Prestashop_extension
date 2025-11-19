@@ -1,14 +1,20 @@
 <?php
 
+require_once __DIR__ . '/TraitWeatherView.php';
+require_once __DIR__ . '/../classes/City.php';
+require_once __DIR__ . '/../classes/History.php';
+require_once __DIR__ . '/ErrorController.php';
+
 /**
  * Controller for the main page: Listing all the cities
  */
-class WeatherCitiesListModuleFrontController extends \WeatherViewModuleFrontController {
+class CitiesList {
+
+	use TraitWeatherView;
 
 	private $methodName;
 
 	public function __construct($methodName = 'post') {
-		parent::__construct();
 		$this->methodName = $methodName;
 	}
 
@@ -22,8 +28,7 @@ class WeatherCitiesListModuleFrontController extends \WeatherViewModuleFrontCont
 	 * @return void
 	 */
 	public function initContent() {
-		$this->context = ContextCore::getContext();
-		parent::initContent();
+		$context = ContextCore::getContext();
 		$apiName = 'OpenWeatherMap';
 		try {
 			$cities = \City::findLastVisitedCities(10);
@@ -42,21 +47,26 @@ class WeatherCitiesListModuleFrontController extends \WeatherViewModuleFrontCont
 				$lastCity = new \City($lastCityId);
 			}
 		} catch (\PDOException $e) {
-			(new WeatherErrorModuleFrontController())->initContent($e->getMessage());
+			ErrorController::initContent($e->getMessage());
 			exit;
 		} catch (\InvalidArgumentException $e) {
-			(new WeatherErrorModuleFrontController())->initContent($e->getMessage());
+			ErrorController::initContent($e->getMessage());
 			exit;
 		}
 		$history = self::getData($lastCity, $apiName);
-		$this->context->smarty->assign(array(
+		$link = $context->link->getModuleLink(
+			'weather',
+			'cityweather'
+		);
+		$context->smarty->assign(array(
 			'method'   => $this->methodName,
 			"city"     => $lastCity,
 			"history"  => $history,
 			"cities"   => $cities,
-			"homeLink" => $this->context->link->getPageLink('index'),
+			"link"     => $link,
+			"homeLink" => $context->link->getPageLink('index'),
 		));
 
-		$this->setTemplate('module:weather/views/templates/front/citiesList.tpl');
+		$context->smarty->display('citiesList.tpl');
 	}
 }

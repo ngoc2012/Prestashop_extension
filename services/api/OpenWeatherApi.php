@@ -1,22 +1,19 @@
 <?php
-namespace PrestaShop\Module\Weather\services\api;
 
-require_once __DIR__ . "/../../models/City.php";
+require_once __DIR__ . "/../../classes/City.php";
+require_once __DIR__ . "/AbstractWeatherApi.php";
 
-use PrestaShop\Module\Weather\services\api\AbstractWeatherApi;
-use RuntimeException;
-use ConfigurationCore;
 
 /**
 * OpenWeatherApi class to interact with the OpenWeather API
 */
 class OpenWeatherApi extends AbstractWeatherApi {
-	
-	
+
+
 	// ===================
 	// === Constructor ===
 	// ===================
-	
+
 	/**
 	* Constructor allows overriding the API key and base URL.
 	*
@@ -29,12 +26,12 @@ class OpenWeatherApi extends AbstractWeatherApi {
 		$this->apiKey  = $apiKey ?: ConfigurationCore::get('OPENWEATHER_API_KEY');
 		$this->baseUrl = $baseUrl ?: ConfigurationCore::get('OPENWEATHER_BASE_URL');
 	}
-	
-	
+
+
 	// ======================
 	// === Public methods ===
 	// ======================
-	
+
 	/**
 	* Get weather data for a specified city.
 	* @param \City $city
@@ -48,8 +45,6 @@ class OpenWeatherApi extends AbstractWeatherApi {
 		if (!$response) {
 			throw new RuntimeException("Failed to fetch weather data from OpenWeather API.");
 		}
-		// {"cod":401, "message": "Invalid API key. Please see https://openweathermap.org/faq#error401 for more info."}
-		// {"cod":"404","message":"city not found"}
 		$data = json_decode($response, true);
 		if (isset($data["cod"]) && $data["cod"] !== 200) {
 			throw new RuntimeException("OpenWeather API error: " . $data["cod"] . " - " . $data["message"]);
@@ -58,12 +53,12 @@ class OpenWeatherApi extends AbstractWeatherApi {
 		$humidity = $data['main']['humidity'];
 		return [$temperature, $humidity];
 	}
-	
-	
+
+
 	// =======================
 	// === Private methods ===
 	// =======================
-	
+
 	/**
 	* Get the API request URL for a specific city.
 	* @param string $cityNameEscaped

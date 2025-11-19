@@ -1,25 +1,21 @@
 <?php
-namespace PrestaShop\Module\Weather\services\api;
 
-require_once __DIR__ . "/../../models/City.php";
-
-use PrestaShop\Module\Weather\services\api\AbstractWeatherApi;
-use RuntimeException;
-use ConfigurationCore;
+require_once __DIR__ . "/../../classes/City.php";
+require_once __DIR__ . "/AbstractWeatherApi.php";
 
 /**
 * FreeWeatherApi class to interact with the FreeWeather API
 */
 class FreeWeatherApi extends AbstractWeatherApi {
-	
-	
+
+
 	// ===================
 	// === Constructor ===
 	// ===================
-	
+
 	/**
 	* Constructor allows overriding the API key and base URL.
-	* 
+	*
 	* @param string|null $apiKey
 	* @param string|null $baseUrl
 	*/
@@ -29,12 +25,12 @@ class FreeWeatherApi extends AbstractWeatherApi {
 		$this->apiKey  = $apiKey ?: ConfigurationCore::get('FREEWEATHER_API_KEY');
 		$this->baseUrl = $baseUrl ?: ConfigurationCore::get('FREEWEATHER_BASE_URL');
 	}
-	
-	
+
+
 	// ======================
 	// === Public methods ===
 	// ======================
-	
+
 	/**
 	* Get weather data for a specified city.
 	* @param \City $city
@@ -52,18 +48,19 @@ class FreeWeatherApi extends AbstractWeatherApi {
 		// {"error":{"code":2006,"message":"API key is invalid."}}
 		$data = json_decode($response, true);
 		if (isset($data["error"])) {
-			throw new RuntimeException("FreeWeather API error: " . $data["error"]["code"] . " - " . $data["error"]["message"]);
+			throw new RuntimeException("FreeWeather API error: "
+			. $data["error"]["code"] . " - " . $data["error"]["message"]);
 		}
 		$temperature = $data['current']['temp_c'];
 		$humidity = $data['current']['humidity'];
 		return [$temperature, $humidity];
 	}
-	
-	
+
+
 	// =======================
 	// === Private methods ===
 	// =======================
-	
+
 	/**
 	* Construct the full API URL for fetching weather data.
 	*

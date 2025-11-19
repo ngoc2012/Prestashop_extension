@@ -1,17 +1,13 @@
 <?php
 
+require_once __DIR__ . '/../services/WeatherService.php';
+require_once __DIR__ . '/ErrorController.php';
+
 /**
 * Base controller class to handle view rendering
 */
-class weatherViewModuleFrontController extends \ModuleFrontController {
+trait TraitWeatherView {
 
-	public function __construct() {
-		parent::__construct();
-	}
-
-	public function initContent() {
-		parent::initContent();
-	}
 
 	// =========================
 	// === Protected Methods ===
@@ -31,10 +27,10 @@ class weatherViewModuleFrontController extends \ModuleFrontController {
 			if (count($city->getHistories()) === 0) {
 				$city->delete();
 			}
-			(new \weatherErrorModuleFrontController())->initContent($e->getMessage());
+			ErrorController::initContent($e->getMessage());
 			exit;
 		} catch (\Exception $e) { // catch anything else
-			(new \weatherErrorModuleFrontController())->initContent('Unexpected error: ' . $e->getMessage());
+			ErrorController::initContent('Unexpected error: ' . $e->getMessage());
 			exit;
 		}
 	}

@@ -1,5 +1,5 @@
 
-{include file="weatherPanel.tpl"}
+{include file="./weatherPanel.tpl"}
 
 <div class="panel panel-default" style="background-color: transparent; border: 2px solid #ccc;">
 	<div class="panel-heading" style="background-color: transparent; color: #343a40;">
@@ -19,10 +19,10 @@
 				<tbody>
 					{foreach from=$histories item=record}
 					<tr>
-						<td class="text-info">{$record->getCreatedAt()}</td>
-						<td>{$record->getApi()|escape}</td>
-						<td>🌡️ {$record->getTemperature()} °C</td>
-						<td>💧 {$record->getHumidity()}%</td>
+						<td class="text-info" style="color: #343a40;">{$record->createdAt}</td>
+						<td>{$record->api|escape}</td>
+						<td>🌡️ {$record->temperature} °C</td>
+						<td>💧 {$record->humidity}%</td>
 					</tr>
 					{/foreach}
 				</tbody>

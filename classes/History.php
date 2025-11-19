@@ -6,7 +6,7 @@ require_once "City.php";
 * History model class with history records of weather data
 */
 class History extends ObjectModel {
-	
+
 	// =================
 	// === Variables ===
 	// =================
@@ -15,24 +15,24 @@ class History extends ObjectModel {
 	public $id_history;
 	/* @var int city id */
 	public $cityId;
-	
+
 	/* @var string API used */
 	public $api;
-	
+
 	/* @var float temperature */
 	public $temperature;
-	
+
 	/* @var float humidity */
 	public $humidity;
-	
+
 	/* @var string created at */
 	public $createdAt;
-	
-	
+
+
 	// =========================
 	// === ObjectModel setup ===
 	// =========================
-	
+
 	public static $definition = [
 		'table' =>  'history',
 		'primary' => 'id_history',
@@ -45,12 +45,12 @@ class History extends ObjectModel {
 			'createdAt'   => ['type' => self::TYPE_DATE, 'validate' => 'isDate'],
 		],
 	];
-	
-	
+
+
 	// ===========================
 	// === Data access methods ===
 	// ===========================
-	
+
 	/**
 	* Find all histories for a city by its ID
 	* @param int $cityId
@@ -80,7 +80,7 @@ class History extends ObjectModel {
 		}
 		return $histories;
 	}
-	
+
 	/**
 	* Find the latest history record overall
 	* @throws PrestaShopException
@@ -99,5 +99,5 @@ class History extends ObjectModel {
 		}
 		return $history;
 	}
-	
+
 }
