@@ -257,9 +257,11 @@ class Weather extends Module {
 	}
 
 	public function hookDisplayHome() {
+		require_once __DIR__.'/controllers/front/main.php';
 		$tplPath = _PS_MODULE_DIR_ . 'weather/views/templates/';
 		$this->context->smarty->addTemplateDir($tplPath);
-		$weatherController = new WeatherMainModuleFrontController('get');
+		$weatherController = new \WeatherMainModuleFrontController('get');
+		$weatherController->module = $this;
 		$weatherController->initContent('get');
 		return $weatherController->run();
 	}
