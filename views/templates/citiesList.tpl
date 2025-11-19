@@ -1,6 +1,6 @@
 <div class="container" style="padding-top: 50px; padding-bottom: 50px;">
 
-	{include file="front/weatherPanel.tpl"}
+	{include file="./front/weatherPanel.tpl"}
 
 	<form method="{$method}" action="index.php" class="text-center" style="margin-bottom: 30px;">
 

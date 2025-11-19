@@ -25,7 +25,7 @@ class CitiesList {
 	/**
 	 * Display the list of cities.
 	 *
-	 * @return void
+	 * @return string HTML content
 	 */
 	public function initContent() {
 		$context = ContextCore::getContext();
@@ -67,6 +67,6 @@ class CitiesList {
 			"homeLink" => $context->link->getPageLink('index'),
 		));
 
-		$context->smarty->display('citiesList.tpl');
+		return $context->smarty->fetch(_PS_MODULE_DIR_ . 'weather/views/templates/citiesList.tpl');
 	}
 }

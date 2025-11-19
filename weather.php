@@ -31,8 +31,7 @@ if (!defined('_PS_VERSION_')) {
 class Weather extends Module {
 	protected $config_form = false;
 
-	public function __construct()
-	{
+	public function __construct() {
 		$this->name = 'weather';
 		$this->tab = 'others';
 		$this->version = '1.0.0';
@@ -61,16 +60,16 @@ class Weather extends Module {
 
 		include(dirname(__FILE__).'/sql/install.php');
 
-		ConfigurationCore::updateValue('OPENWEATHER_API_KEY', '6bd83c8ba20d3606bd49cef93d45f943');
-		ConfigurationCore::updateValue('OPENWEATHER_BASE_URL', 'https://api.openweathermap.org/data/2.5/weather');
-		ConfigurationCore::updateValue('FREEWEATHER_API_KEY', 'd0087dd7e57c4ed5b23142120250411');
-		ConfigurationCore::updateValue('FREEWEATHER_BASE_URL', 'http://api.weatherapi.com/v1/current.json');
-		ConfigurationCore::updateValue('BASE_URL', 'http://localhost/prestashop/en/');
+		include_once dirname(__FILE__).'/config/AppConfig.php';
+
+		ConfigurationCore::updateValue('OPENWEATHER_API_KEY', AppConfig::OPENWEATHER_API_KEY);
+		ConfigurationCore::updateValue('OPENWEATHER_BASE_URL', AppConfig::OPENWEATHER_BASE_URL);
+		ConfigurationCore::updateValue('FREEWEATHER_API_KEY', AppConfig::FREEWEATHER_API_KEY);
+		ConfigurationCore::updateValue('FREEWEATHER_BASE_URL', AppConfig::FREEWEATHER_BASE_URL);
+		ConfigurationCore::updateValue('BASE_URL', AppConfig::BASE_URL);
 
 		return parent::install() &&
 		$this->installTab() &&
-		$this->registerHook('header') &&
-		$this->registerHook('displayBackOfficeHeader') &&
 		$this->registerHook('displayHome');
 	}
 
@@ -238,29 +237,17 @@ class Weather extends Module {
 		}
 	}
 
-	/**
-	* Add the CSS & JavaScript files you want to be loaded in the BO.
-	*/
-	public function hookDisplayBackOfficeHeader() {
-		if (Tools::getValue('configure') == $this->name) {
-			$this->context->controller->addJS($this->_path.'views/js/back.js');
-			$this->context->controller->addCSS($this->_path.'views/css/back.css');
-		}
-	}
-
-	/**
-	* Add the CSS & JavaScript files you want to be added on the FO.
-	*/
-	public function hookHeader() {
-		$this->context->controller->addJS($this->_path.'/views/js/front.js');
-		$this->context->controller->addCSS($this->_path.'/views/css/front.css');
-	}
-
 	public function hookDisplayHome() {
 		require_once __DIR__.'/controllers/CitiesList.php';
-		$tplPath = _PS_MODULE_DIR_ . 'weather/views/templates/';
-		$this->context->smarty->addTemplateDir($tplPath);
+		// // $tplPath = _PS_MODULE_DIR_ . 'weather/views/templates/';
+		// // $this->context->smarty->addTemplateDir($tplPath);
 		$weatherController = new CitiesList('post');
-		$weatherController->initContent();
+		$html = $weatherController->initContent();
+		echo $html;
+		// $context = ContextCore::getContext();
+		return '<div style="padding:20px;background:#eef;border:1px solid #99c;">
+                Weather module test OK
+            </div>';
+		// return $weatherController->initContent();
 	}
 }
