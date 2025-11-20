@@ -1,18 +1,26 @@
 <?php
 
-require_once __DIR__ . '/TraitWeatherView.php';
 require_once __DIR__ . '/../classes/City.php';
 require_once __DIR__ . '/../classes/History.php';
 require_once __DIR__ . '/ErrorController.php';
+require_once __DIR__ . '/../services/WeatherService.php';
 
 /**
  * Controller for the main page: Listing all the cities
  */
 class CitiesList {
 
-	use TraitWeatherView;
+
+	// =========================
+	// === Variables ===========
+	// =========================
 
 	private $methodName;
+
+
+	// =========================
+	// === Constructor ========
+	// =========================
 
 	public function __construct($methodName = 'post') {
 		$this->methodName = $methodName;
@@ -53,20 +61,25 @@ class CitiesList {
 			ErrorController::initContent($e->getMessage());
 			exit;
 		}
-		$history = self::getData($lastCity, $apiName);
-		$link = $context->link->getModuleLink(
-			'weather',
-			'cityweather'
-		);
-		$context->smarty->assign(array(
-			'method'   => $this->methodName,
-			"city"     => $lastCity,
-			"history"  => $history,
-			"cities"   => $cities,
-			"link"     => $link,
-			"homeLink" => $context->link->getPageLink('index'),
-		));
+		try {
+			$history = WeatherService::getData($lastCity, $apiName);
+			$link = $context->link->getModuleLink(
+				'weather',
+				'cityweather'
+			);
+			$context->smarty->assign(array(
+				'method'   => $this->methodName,
+				"city"     => $lastCity,
+				"history"  => $history,
+				"cities"   => $cities,
+				"link"     => $link,
+				"homeLink" => $context->link->getPageLink('index'),
+			));
 
-		$context->smarty->display('citiesList.tpl');
+			$context->smarty->display('citiesList.tpl');
+		} catch (\RuntimeException $e) {
+			ErrorController::initContent($e->getMessage());
+			exit;
+		}
 	}
 }

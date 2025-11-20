@@ -92,15 +92,11 @@ class City extends ObjectModel {
 				ORDER BY MAX(h.createdAt) DESC, c.id_city ASC
 				LIMIT $limit;
         	";
-			$citiesData = Db::getInstance()->executeS($sql);
-			if (!$citiesData) {
+			$cities = Db::getInstance()->executeS($sql);
+			if (!$cities) {
 				return [];
 			}
-			$cities = [];
-			foreach ($citiesData as $row) {
-				$cities[] = new City($row['id_city']);
-			}
-			return $cities;
+			return ObjectModel::hydrateCollection(\City::class, $cities);
 		}
 
 	}

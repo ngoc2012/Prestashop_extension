@@ -31,8 +31,7 @@ if (!defined('_PS_VERSION_')) {
 class Weather extends Module {
 	protected $config_form = false;
 
-	public function __construct()
-	{
+	public function __construct() {
 		$this->name = 'weather';
 		$this->tab = 'others';
 		$this->version = '1.0.0';
@@ -236,24 +235,6 @@ class Weather extends Module {
 		foreach (array_keys($form_values) as $key) {
 			ConfigurationCore::updateValue($key, Tools::getValue($key));
 		}
-	}
-
-	/**
-	* Add the CSS & JavaScript files you want to be loaded in the BO.
-	*/
-	public function hookDisplayBackOfficeHeader() {
-		if (Tools::getValue('configure') == $this->name) {
-			$this->context->controller->addJS($this->_path.'views/js/back.js');
-			$this->context->controller->addCSS($this->_path.'views/css/back.css');
-		}
-	}
-
-	/**
-	* Add the CSS & JavaScript files you want to be added on the FO.
-	*/
-	public function hookHeader() {
-		$this->context->controller->addJS($this->_path.'/views/js/front.js');
-		$this->context->controller->addCSS($this->_path.'/views/css/front.css');
 	}
 
 	public function hookDisplayHome() {
