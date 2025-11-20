@@ -50,7 +50,7 @@ class CitiesList {
 					$apiName = $lastHistory->api;
 					$lastCityId = $lastHistory->cityId;
 				} catch (\PrestaShopException $e) {
-					$lastCityId = $cities[0]->id_city;
+					$lastCityId = $cities[0]->id;
 				}
 				$lastCity = new \City($lastCityId);
 			}
