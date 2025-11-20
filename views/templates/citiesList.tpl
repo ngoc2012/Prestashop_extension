@@ -2,13 +2,13 @@
 
 	{include file="./front/weatherPanel.tpl"}
 
-	<form method="{$method}" action="index.php" class="text-center" style="margin-bottom: 30px;">
+	<form method="{$weather_method}" action="index.php" class="text-center" style="margin-bottom: 30px;">
 
 		<input type="hidden" name="fc" value="module">
 		<input type="hidden" name="module" value="weather">
 		<input type="hidden" name="controller" value="cityweather">
 		<input type="hidden" name="id_lang" value="1">
-		<input type="hidden" name="method" value="{$method}">
+		<input type="hidden" name="method" value="{$weather_method}">
 
 		<div class="form-group" style="display: inline-block; margin-right: 10px;">
 			<input type="text" name="name" class="form-control" placeholder="Enter city name..." 
@@ -25,23 +25,23 @@
 	<div class="panel panel-default" style="background-color: transparent;border: none;">
 		<div class="panel-body" style="padding: 0;">
 			<ul class="list-group">
-				{foreach from=$cities item=city}
+				{foreach from=$weather_cities item=city}
 				<li class="list-group-item" style="background-color: #f8f9fa; color : #343a40;border: 1px solid #6c757d;">
 					<div style="display: table; width: 100%;">
 						<!-- Name on the left -->
 						<span style="display: table-cell; font-weight: bold;">{$city->name}</span>
 						<!-- Buttons on the right -->
 						<div style="display: table-cell; text-align: right; white-space: nowrap;">
-							{if $method == 'post'}
+							{if $weather_method == 'post'}
 							
-							<form method="post" action="{$link}&method=post" class="form-inline" style="display:inline-block; margin-right:5px;">
+							<form method="post" action="{$weather_link}&method=post" class="form-inline" style="display:inline-block; margin-right:5px;">
 								<input type="hidden" name="name" value="{$city->name}">
 								<input type="hidden" name="api" value="OpenWeatherApi">
 								<input type="hidden" name="id" value="{$city->id_city}">
 								<button type="submit" class="btn btn-info btn-xs">Open Weather</button>
 							</form>
 							
-							<form method="post" action="{$link}&method=post" class="form-inline" style="display:inline-block;">
+							<form method="post" action="{$weather_link}&method=post" class="form-inline" style="display:inline-block;">
 								<input type="hidden" name="name" value="{$city->name}">
 								<input type="hidden" name="api" value="FreeWeatherApi">
 								<input type="hidden" name="id" value="{$city->id_city}">
@@ -50,11 +50,11 @@
 							
 							{else} 
 							
-							<a href="{$link}&method=get&name={$city->encodeCityName()}&id={$city->id_city}&api=OpenWeatherApi" 
+							<a href="{$weather_link}&method=get&name={$city->encodeCityName()}&id={$city->id_city}&api=OpenWeatherApi" 
 								class="btn btn-info btn-xs" style="margin-left: 5px;">
 								Open Weather
 							</a>
-							<a href="{$link}&method=get&name={$city->encodeCityName()}&id={$city->id_city}&api=FreeWeatherApi" 
+							<a href="{$weather_link}&method=get&name={$city->encodeCityName()}&id={$city->id_city}&api=FreeWeatherApi" 
 								class="btn btn-success btn-xs" style="margin-left: 5px;">
 								Free Weather
 							</a>

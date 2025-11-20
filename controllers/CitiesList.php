@@ -25,7 +25,7 @@ class CitiesList {
 	/**
 	 * Display the list of cities.
 	 *
-	 * @return string HTML content
+	 * @return void
 	 */
 	public function initContent() {
 		$context = ContextCore::getContext();
@@ -59,14 +59,14 @@ class CitiesList {
 			'cityweather'
 		);
 		$context->smarty->assign(array(
-			'method'   => $this->methodName,
-			"city"     => $lastCity,
-			"history"  => $history,
-			"cities"   => $cities,
-			"link"     => $link,
-			"homeLink" => $context->link->getPageLink('index'),
+			"weather_method"   => $this->methodName,
+			"weather_city"     => $lastCity,
+			"weather_history"  => $history,
+			"weather_cities"   => $cities,
+			"weather_link"     => $link,
+			"weather_homeLink" => $context->link->getPageLink('index'),
 		));
 
-		return $context->smarty->fetch(_PS_MODULE_DIR_ . 'weather/views/templates/citiesList.tpl');
+		$context->smarty->display(_PS_MODULE_DIR_ . 'weather/views/templates/citiesList.tpl');
 	}
 }

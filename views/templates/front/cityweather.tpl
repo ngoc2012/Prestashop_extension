@@ -18,7 +18,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						{foreach from=$histories item=record}
+						{foreach from=$weather_histories item=record}
 						<tr>
 							<td class="text-info" style="color: #343a40;">{$record->createdAt}</td>
 							<td>{$record->api|escape}</td>

@@ -50,10 +50,10 @@ class weatherCityWeatherModuleFrontController extends \ModuleFrontController {
 			exit;
 		}
 		$this->context->smarty->assign(array(
-			'histories' => $histories,
-			'city' => $this->city,
-			'history' => $histories[0],
-			'homeLink' => $this->context->link->getPageLink('index'),
+			'weather_histories' => $histories,
+			'weather_city' => $this->city,
+			'weather_history' => $histories[0],
+			'weather_homeLink' => $this->context->link->getPageLink('index'),
 		));
 		// $this->setTemplate(_PS_MODULE_DIR_ . 'weather/views/templates/front/cityweather.tpl');
 		$this->setTemplate('cityweather.tpl');
