@@ -62,7 +62,7 @@ $sql[] = 'INSERT INTO `' . _DB_PREFIX_ . 'city` (`name`) VALUES
 ("Porto");';
 
 foreach ($sql as $query) {
-    if (Db::getInstance()->execute($query) == false) {
-        return false;
-    }
+	if (Db::getInstance()->execute($query) == false) {
+		return false;
+	}
 }
