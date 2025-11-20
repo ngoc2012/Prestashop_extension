@@ -37,7 +37,7 @@ $sql[] = "SET FOREIGN_KEY_CHECKS = 1";
 
 
 foreach ($sql as $query) {
-    if (Db::getInstance()->execute($query) == false) {
-        return false;
-    }
+	if (Db::getInstance()->execute($query) == false) {
+		return false;
+	}
 }

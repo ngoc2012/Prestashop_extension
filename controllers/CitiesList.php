@@ -1,14 +1,17 @@
 <?php
 
-require_once __DIR__ . '/../classes/City.php';
-require_once __DIR__ . '/../classes/History.php';
+require_once __DIR__ . '/../models/City.php';
+require_once __DIR__ . '/../models/History.php';
 require_once __DIR__ . '/ErrorController.php';
-require_once __DIR__ . '/../services/WeatherService.php';
+require_once __DIR__ . '/../classes/WeatherService.php';
+
+use Certideal\CertiLogger\CertiLogger;
+use Certideal\PrestashopHelpers\CertidealAbstractService;
 
 /**
  * Controller for the main page: Listing all the cities
  */
-class CitiesList {
+class CitiesList extends CertidealAbstractService {
 
 
 	// =========================
@@ -50,7 +53,7 @@ class CitiesList {
 					$apiName = $lastHistory->api;
 					$lastCityId = $lastHistory->cityId;
 				} catch (\PrestaShopException $e) {
-					$lastCityId = $cities[0]->id_city;
+					$lastCityId = $cities[0]->id;
 				}
 				$lastCity = new \City($lastCityId);
 			}
@@ -81,5 +84,18 @@ class CitiesList {
 			ErrorController::initContent($e->getMessage());
 			exit;
 		}
+	}
+
+
+	// =====================
+	// = Overrided Methods =
+	// =====================
+
+	/**
+	 * {@inheritDoc}
+	 * @see \Certideal\PrestashopHelpers\CertidealAbstractObjectModel::getLoggerSection()
+	 */
+	protected function getLoggerSection() {
+		return CertiLogger::LOGGER_LEVEL_INFO;
 	}
 }

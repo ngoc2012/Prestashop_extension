@@ -37,24 +37,24 @@
 							<form method="post" action="{$weather_link}&method=post" class="form-inline" style="display:inline-block; margin-right:5px;">
 								<input type="hidden" name="name" value="{$city->name}">
 								<input type="hidden" name="api" value="OpenWeatherApi">
-								<input type="hidden" name="id" value="{$city->id_city}">
+								<input type="hidden" name="id" value="{$city->id}">
 								<button type="submit" class="btn btn-info btn-xs">Open Weather</button>
 							</form>
 							
 							<form method="post" action="{$weather_link}&method=post" class="form-inline" style="display:inline-block;">
 								<input type="hidden" name="name" value="{$city->name}">
 								<input type="hidden" name="api" value="FreeWeatherApi">
-								<input type="hidden" name="id" value="{$city->id_city}">
+								<input type="hidden" name="id" value="{$city->id}">
 								<button type="submit" class="btn btn-success btn-xs">Free Weather</button>
 							</form>
 							
 							{else} 
 							
-							<a href="{$weather_link}&method=get&name={$city->encodeCityName()}&id={$city->id_city}&api=OpenWeatherApi" 
+							<a href="{$weather_link}&method=get&name={$city->encodeCityName()}&id={$city->id}&api=OpenWeatherApi" 
 								class="btn btn-info btn-xs" style="margin-left: 5px;">
 								Open Weather
 							</a>
-							<a href="{$weather_link}&method=get&name={$city->encodeCityName()}&id={$city->id_city}&api=FreeWeatherApi" 
+							<a href="{$weather_link}&method=get&name={$city->encodeCityName()}&id={$city->id}&api=FreeWeatherApi" 
 								class="btn btn-success btn-xs" style="margin-left: 5px;">
 								Free Weather
 							</a>

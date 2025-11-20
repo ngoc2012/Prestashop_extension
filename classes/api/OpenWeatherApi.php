@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . "/../../classes/City.php";
+require_once __DIR__ . "/../../models/City.php";
 require_once __DIR__ . "/AbstractWeatherApi.php";
 
 
@@ -41,7 +41,7 @@ class OpenWeatherApi extends AbstractWeatherApi {
 	public function fetchWeather($city) {
 		$cityNameEscaped = $city->encodeCityName();
 		$url = $this->getUrl($cityNameEscaped);
-		$response = file_get_contents($url, false, $this->context);
+		$response = file_get_contents($url, false, $this->weatherApiContext);
 		if (!$response) {
 			throw new RuntimeException("Failed to fetch weather data from OpenWeather API.");
 		}

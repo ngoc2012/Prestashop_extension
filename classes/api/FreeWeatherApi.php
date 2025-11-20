@@ -1,7 +1,12 @@
 <?php
 
-require_once __DIR__ . "/../../classes/City.php";
+require_once __DIR__ . "/../../models/City.php";
 require_once __DIR__ . "/AbstractWeatherApi.php";
+require_once __DIR__ . "/WeatherApiLogger.php";
+require_once __DIR__ . "/FreeWeatherRequest.php";
+
+use Certideal\RequestSender\Entity\BeanRequest\EmptyBeanRequest;
+use Certideal\RequestSender\RequestSender;
 
 /**
 * FreeWeatherApi class to interact with the FreeWeather API
@@ -39,21 +44,30 @@ class FreeWeatherApi extends AbstractWeatherApi {
 	*/
 	public function fetchWeather($city) {
 		$cityNameEscaped = $city->encodeCityName();
-		$url = $this->getUrl($cityNameEscaped);
-		$response = file_get_contents($url, false, $this->context);
+		$endpoint = $this->getUrl($cityNameEscaped);
+		// $response = file_get_contents($url, false, $this->weatherApiContext);
+		$sender = new RequestSender(
+			$endpoint,
+			WeatherApiLogger::getInstance(),
+			10,     // timeout 10 seconds
+			true    // debug mode
+		);
+		$request = new \FreeWeatherRequest(new EmptyBeanRequest(), [], null);
+		$response = $sender->send($request, new FreeWeatherResponseHandler(WeatherApiLogger::getInstance()));
 		if (!$response) {
 			throw new RuntimeException("Failed to fetch weather data from FreeWeather API.");
 		}
 		// {"error":{"code":1006,"message":"No matching location found."}}
 		// {"error":{"code":2006,"message":"API key is invalid."}}
-		$data = json_decode($response, true);
-		if (isset($data["error"])) {
-			throw new RuntimeException("FreeWeather API error: "
-			. $data["error"]["code"] . " - " . $data["error"]["message"]);
-		}
-		$temperature = $data['current']['temp_c'];
-		$humidity = $data['current']['humidity'];
-		return [$temperature, $humidity];
+		// $data = json_decode($response, true);
+		// if (isset($data["error"])) {
+		// 	throw new RuntimeException("FreeWeather API error: "
+		// 	. $data["error"]["code"] . " - " . $data["error"]["message"]);
+		// }
+		// $temperature = $data['current']['temp_c'];
+		// $humidity = $data['current']['humidity'];
+		// return [$temperature, $humidity];
+		return [$response->getData()];
 	}
 
 

@@ -2,18 +2,19 @@
 
 require_once "City.php";
 
+use Certideal\CertiLogger\CertiLogger;
+use Certideal\PrestashopHelpers\CertidealAbstractObjectModel;
+
 /**
 * History model class with history records of weather data
 */
-class History extends ObjectModel {
+class History extends CertidealAbstractObjectModel {
 
 	// =================
 	// === Variables ===
 	// =================
-	public $id;
-	/* @var int history id */
-	public $id_history;
-	/* @var int city id */
+
+	/* @var int city ID */
 	public $cityId;
 
 	/* @var string API used */
@@ -37,7 +38,6 @@ class History extends ObjectModel {
 		'table' =>  'history',
 		'primary' => 'id_history',
 		'fields' => [
-			'id_history' => ['type' => self::TYPE_INT, 'validate' => 'isUnsignedId'],
 			'cityId'      => ['type' => self::TYPE_INT, 'validate' => 'isUnsignedId', 'required' => true],
 			'api'         => ['type' => self::TYPE_STRING, 'validate' => 'isName', 'required' => true],
 			'temperature' => ['type' => self::TYPE_FLOAT, 'validate' => 'isFloat'],
@@ -98,6 +98,19 @@ class History extends ObjectModel {
 			throw new PrestaShopException("Failed to load history record with ID " . $row['id_history']);
 		}
 		return $history;
+	}
+
+
+	// =====================
+	// = Overrided Methods =
+	// =====================
+
+	/**
+	 * {@inheritDoc}
+	 * @see \Certideal\PrestashopHelpers\CertidealAbstractObjectModel::getLoggerSection()
+	 */
+	protected function getLoggerSection() {
+		return CertiLogger::LOGGER_LEVEL_INFO;
 	}
 
 }

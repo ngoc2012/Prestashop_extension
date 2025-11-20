@@ -1,8 +1,11 @@
 <?php
 
-require_once dirname(__FILE__).'/../../classes/City.php';
+require_once dirname(__FILE__).'/../../models/City.php';
 
-class AdminWeatherController extends ModuleAdminController {
+use Certideal\CertiLogger\CertiLogger;
+use Certideal\PrestashopHelpers\CertidealAbstractModuleAdminController;
+
+class AdminWeatherController extends CertidealAbstractModuleAdminController {
 
 
 	// ===================
@@ -71,9 +74,26 @@ class AdminWeatherController extends ModuleAdminController {
 			'submit' => [
 				'title' => $this->l('Save'),
 				'class' => 'btn btn-primary'
-				]
-			];
-
-			return parent::renderForm();
-		}
+			]
+		];
+		return parent::renderForm();
 	}
+
+	/**
+	 *
+	 * {@inheritDoc}
+	 * @see \Certideal\PrestashopHelpers\CertidealAbstractModuleAdminController::getObjectModelClassName()
+	 */
+	protected function getObjectModelClassName() {
+		return 'City';
+	}
+
+	/**
+	 *
+	 * {@inheritDoc}
+	 * @see \Certideal\PrestashopHelpers\CertidealAbstractModuleAdminController::getObjectModelTableName()
+	 */
+	protected function getObjectModelTableName() {
+		return 'city';
+	}
+}

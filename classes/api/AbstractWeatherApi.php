@@ -1,11 +1,14 @@
 <?php
 
-require_once __DIR__ . "/../../classes/City.php";
+require_once __DIR__ . "/../../models/City.php";
+
+use Certideal\CertiLogger\CertiLogger;
+use Certideal\PrestashopHelpers\CertidealAbstractService;
 
 /**
 * Base class for all WeatherApi type
 */
-abstract class AbstractWeatherApi { // implements WeatherApiInterface {
+abstract class AbstractWeatherApi extends CertidealAbstractService { // implements WeatherApiInterface {
 
 
 	// =================
@@ -19,7 +22,7 @@ abstract class AbstractWeatherApi { // implements WeatherApiInterface {
 	/* @var string */
 	protected $apiName;
 	/** @var resource */
-	protected $context;
+	protected $weatherApiContext;
 
 
 	// ===================
@@ -27,7 +30,7 @@ abstract class AbstractWeatherApi { // implements WeatherApiInterface {
 	// ===================
 
 	public function __construct() {
-		$this->context = stream_context_create([
+		$this->weatherApiContext = stream_context_create([
 			'http' => [
 				'ignore_errors' => true, // KEEP BODY even if HTTP 400/500
 				'timeout' => 5,
@@ -51,4 +54,16 @@ abstract class AbstractWeatherApi { // implements WeatherApiInterface {
 	*/
 	abstract public function fetchWeather($city);
 
+
+	// =====================
+	// = Overrided Methods =
+	// =====================
+
+	/**
+	 * {@inheritDoc}
+	 * @see \Certideal\PrestashopHelpers\CertidealAbstractObjectModel::getLoggerSection()
+	 */
+	protected function getLoggerSection() {
+		return CertiLogger::LOGGER_LEVEL_INFO;
+	}
 }

@@ -2,13 +2,16 @@
 
 // http://localhost/prestashop/index.php?fc=module&module=weather&controller=cityweather
 
-require_once __DIR__ . '/../../services/WeatherService.php';
+require_once __DIR__ . '/../../classes/WeatherService.php';
 require_once __DIR__ . '/../ErrorController.php';
+
+use Certideal\CertiLogger\CertiLogger;
+use Certideal\PrestashopHelpers\CertidealAbstractModuleFrontController;
 
 /**
 * Controller for the city weather page
 */
-class weatherCityWeatherModuleFrontController extends \ModuleFrontController {
+class weatherCityWeatherModuleFrontController extends CertidealAbstractModuleFrontController {
 
 
 	// =================
@@ -38,6 +41,10 @@ class weatherCityWeatherModuleFrontController extends \ModuleFrontController {
 		try {
 			WeatherService::getData($this->city, $this->apiName);
 		} catch (\RuntimeException $e) {
+			$histories = $this->city->getHistories();
+			if (count($histories) == 0) {
+				$this->city->delete();
+			}
 			ErrorController::initContent($e->getMessage());
 			exit;
 		}
