@@ -4,14 +4,11 @@
 
 require_once __DIR__ . '/../../services/WeatherService.php';
 require_once __DIR__ . '/../ErrorController.php';
-require_once __DIR__ . '/../TraitWeatherView.php';
 
 /**
 * Controller for the city weather page
 */
 class weatherCityWeatherModuleFrontController extends \ModuleFrontController {
-
-	use TraitWeatherView;
 
 
 	// =================
@@ -39,7 +36,7 @@ class weatherCityWeatherModuleFrontController extends \ModuleFrontController {
 		parent::initContent();
 		$this->checkInput();
 		try {
-			$this->getData($this->city, $this->apiName);
+			WeatherService::getData($this->city, $this->apiName);
 		} catch (\RuntimeException $e) {
 			ErrorController::initContent($e->getMessage());
 			exit;
