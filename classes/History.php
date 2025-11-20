@@ -7,12 +7,11 @@ require_once "City.php";
 */
 class History extends ObjectModel {
 
+
 	// =================
 	// === Variables ===
 	// =================
-	public $id;
-	/* @var int history id */
-	public $id_history;
+
 	/* @var int city id */
 	public $cityId;
 
@@ -37,7 +36,6 @@ class History extends ObjectModel {
 		'table' =>  'history',
 		'primary' => 'id_history',
 		'fields' => [
-			'id_history' => ['type' => self::TYPE_INT, 'validate' => 'isUnsignedId'],
 			'cityId'      => ['type' => self::TYPE_INT, 'validate' => 'isUnsignedId', 'required' => true],
 			'api'         => ['type' => self::TYPE_STRING, 'validate' => 'isName', 'required' => true],
 			'temperature' => ['type' => self::TYPE_FLOAT, 'validate' => 'isFloat'],

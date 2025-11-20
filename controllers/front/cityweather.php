@@ -38,6 +38,10 @@ class weatherCityWeatherModuleFrontController extends \ModuleFrontController {
 		try {
 			WeatherService::getData($this->city, $this->apiName);
 		} catch (\RuntimeException $e) {
+			$histories = $this->city->getHistories();
+			if (count($histories) == 0) {
+				$this->city->delete();
+			}
 			ErrorController::initContent($e->getMessage());
 			exit;
 		}
@@ -67,8 +71,8 @@ class weatherCityWeatherModuleFrontController extends \ModuleFrontController {
 			$method = $_POST;
 		}
 		if (isset($method["name"])) {
-			if (isset($method['id_city'])) {
-				$this->city = new \City(intval($method['id_city']));
+			if (isset($method['id'])) {
+				$this->city = new \City(intval($method['id']));
 				if (!$this->city || $this->city->name !== trim($method['name'])) {
 					ErrorController::initContent("City ID and name do not match.");
 					exit;
