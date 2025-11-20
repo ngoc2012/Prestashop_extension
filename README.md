@@ -75,6 +75,24 @@ http://localhost/prestashop/index.php
 |10      |certideal (pro)|certideal-pro          |1         |1                  |1                   |12              |
 
 
+## Hook
+
+ps_hook_module
+
+|id_module|id_shop|id_hook|position|
+|---------|-------|-------|--------|
+|413      |1      |155    |0       |
+|413      |1      |158    |0       |
+|414      |1      |155    |0       |
+|414      |1      |158    |0       |
+|415      |1      |158    |0       |
+|416      |1      |155    |0       |
+|416      |1      |158    |0       |
+|565      |1      |8      |0       |
+|4        |1      |153    |1       |
+|5        |1      |60     |1       |
+
+
 ## Main page
 
 ### IndexController
