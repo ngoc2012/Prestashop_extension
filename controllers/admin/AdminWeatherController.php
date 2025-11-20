@@ -72,8 +72,7 @@ class AdminWeatherController extends ModuleAdminController {
 				'title' => $this->l('Save'),
 				'class' => 'btn btn-primary'
 				]
-			];
-
-			return parent::renderForm();
-		}
+		];
+		return parent::renderForm();
 	}
+}
