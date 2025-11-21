@@ -1,13 +1,17 @@
 <?php
 
+require_once __DIR__ . "/../../models/History.php";
+
 use Certideal\RequestSender\Entity\Response\ResponseInterface;
 
-class FreeWeatherResponse implements ResponseInterface {
+class WeatherApiResponse implements ResponseInterface {
+
+
 	// =============
 	// = Variables =
 	// =============
 
-	/** @var mixed */
+	/** @var History */
 	private $data;
 
 
@@ -16,7 +20,7 @@ class FreeWeatherResponse implements ResponseInterface {
 	// ===============
 
 
-	public function __construct($data) {
+	public function __construct(History $data) {
 		$this->data = $data;
 	}
 

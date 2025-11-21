@@ -19,24 +19,9 @@ abstract class AbstractWeatherApi extends CertidealAbstractService { // implemen
 	protected $apiKey;
 	/* @var string */
 	protected $baseUrl;
+	protected $uri;
 	/* @var string */
 	protected $apiName;
-	/** @var resource */
-	protected $weatherApiContext;
-
-
-	// ===================
-	// === Constructor ===
-	// ===================
-
-	public function __construct() {
-		$this->weatherApiContext = stream_context_create([
-			'http' => [
-				'ignore_errors' => true, // KEEP BODY even if HTTP 400/500
-				'timeout' => 5,
-			],
-		]);
-	}
 
 
 	// ======================

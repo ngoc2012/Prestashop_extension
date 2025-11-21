@@ -2,7 +2,6 @@
 
 require_once dirname(__FILE__).'/../../models/City.php';
 
-use Certideal\CertiLogger\CertiLogger;
 use Certideal\PrestashopHelpers\CertidealAbstractModuleAdminController;
 
 class AdminWeatherController extends CertidealAbstractModuleAdminController {

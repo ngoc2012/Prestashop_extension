@@ -1,9 +1,11 @@
 <?php
 
 require_once __DIR__ . "/../../models/City.php";
+require_once __DIR__ . "/../../models/History.php";
 require_once __DIR__ . "/AbstractWeatherApi.php";
 require_once __DIR__ . "/WeatherApiLogger.php";
-require_once __DIR__ . "/FreeWeatherRequest.php";
+require_once __DIR__ . "/WeatherApiRequest.php";
+require_once __DIR__ . "/FreeWeatherResponseHandler.php";
 
 use Certideal\RequestSender\Entity\BeanRequest\EmptyBeanRequest;
 use Certideal\RequestSender\RequestSender;
@@ -24,11 +26,12 @@ class FreeWeatherApi extends AbstractWeatherApi {
 	* @param string|null $apiKey
 	* @param string|null $baseUrl
 	*/
-	public function __construct($apiKey = null, $baseUrl = null) {
+	public function __construct($apiKey = null, $baseUrl = null, $uri = null) {
 		parent::__construct();
 		$this->apiName = "FreeWeatherApi";
 		$this->apiKey  = $apiKey ?: ConfigurationCore::get('FREEWEATHER_API_KEY');
 		$this->baseUrl = $baseUrl ?: ConfigurationCore::get('FREEWEATHER_BASE_URL');
+		$this->uri = $uri ?: ConfigurationCore::get('FREEWEATHER_URI');
 	}
 
 
@@ -39,49 +42,25 @@ class FreeWeatherApi extends AbstractWeatherApi {
 	/**
 	* Get weather data for a specified city.
 	* @param \City $city
-	* @return [float, float]
+	* @return \History
 	* @throws RuntimeException
 	*/
 	public function fetchWeather($city) {
 		$cityNameEscaped = $city->encodeCityName();
-		$endpoint = $this->getUrl($cityNameEscaped);
-		// $response = file_get_contents($url, false, $this->weatherApiContext);
 		$sender = new RequestSender(
-			$endpoint,
+			$this->baseUrl,
 			WeatherApiLogger::getInstance(),
 			10,     // timeout 10 seconds
 			true    // debug mode
 		);
-		$request = new \FreeWeatherRequest(new EmptyBeanRequest(), [], null);
-		$response = $sender->send($request, new FreeWeatherResponseHandler(WeatherApiLogger::getInstance()));
-		if (!$response) {
-			throw new RuntimeException("Failed to fetch weather data from FreeWeather API.");
-		}
-		// {"error":{"code":1006,"message":"No matching location found."}}
-		// {"error":{"code":2006,"message":"API key is invalid."}}
-		// $data = json_decode($response, true);
-		// if (isset($data["error"])) {
-		// 	throw new RuntimeException("FreeWeather API error: "
-		// 	. $data["error"]["code"] . " - " . $data["error"]["message"]);
-		// }
-		// $temperature = $data['current']['temp_c'];
-		// $humidity = $data['current']['humidity'];
-		// return [$temperature, $humidity];
-		return [$response->getData()];
-	}
-
-
-	// =======================
-	// === Private methods ===
-	// =======================
-
-	/**
-	* Construct the full API URL for fetching weather data.
-	*
-	* @param string $cityNameEscaped The URL-encoded city name.
-	* @return string The complete API URL.
-	*/
-	private function getUrl($cityNameEscaped) {
-		return $this->baseUrl . "?key={$this->apiKey}&q={$cityNameEscaped}&aqi=no";
+		// http://api.weatherapi.com/v1/current.json?key=d008...&q=Quang+Ninh&aqi=no
+		$request = new \WeatherApiRequest(new EmptyBeanRequest(), [
+			'key' => $this->apiKey,
+			'q' => $cityNameEscaped,
+			'aqi' => 'no'
+		], null, $this->uri);
+		$responseHandler = new FreeWeatherResponseHandler(WeatherApiLogger::getInstance(), $city, $this);
+		$response = $sender->send($request, $responseHandler);
+		return $response->getData();
 	}
 }

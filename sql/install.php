@@ -47,19 +47,7 @@ $sql[] = 'INSERT INTO `' . _DB_PREFIX_ . 'city` (`name`) VALUES
 ("Los Angeles"),
 ("Chicago"),
 ("San Jose"),
-("London"),
-("Paris"),
-("Berlin"),
-("Munich"),
-("Frankfurt"),
-("Madrid"),
-("Barcelona"),
-("Naples"),
-("Venice"),
-("Athens"),
-("Vienna"),
-("Brussels"),
-("Porto");';
+("London");';
 
 foreach ($sql as $query) {
 	if (Db::getInstance()->execute($query) == false) {

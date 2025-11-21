@@ -5,7 +5,7 @@
 require_once __DIR__ . '/../../classes/WeatherService.php';
 require_once __DIR__ . '/../ErrorController.php';
 
-use Certideal\CertiLogger\CertiLogger;
+use Certideal\RequestSender\Common\RequestSenderException;
 use Certideal\PrestashopHelpers\CertidealAbstractModuleFrontController;
 
 /**
@@ -40,7 +40,7 @@ class weatherCityWeatherModuleFrontController extends CertidealAbstractModuleFro
 		$this->checkInput();
 		try {
 			WeatherService::getData($this->city, $this->apiName);
-		} catch (\RuntimeException $e) {
+		} catch (RequestSenderException $e) {
 			$histories = $this->city->getHistories();
 			if (count($histories) == 0) {
 				$this->city->delete();
@@ -59,7 +59,6 @@ class weatherCityWeatherModuleFrontController extends CertidealAbstractModuleFro
 			'weather_history' => $histories[0],
 			'weather_homeLink' => $this->context->link->getPageLink('index'),
 		));
-		// $this->setTemplate(_PS_MODULE_DIR_ . 'weather/views/templates/front/cityweather.tpl');
 		$this->setTemplate('cityweather.tpl');
 	}
 

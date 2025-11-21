@@ -5,13 +5,13 @@
  *  @author    Minh Ngoc Nguyen
  */
 
-use Certideal\PrestashopHelpers\CertidealAbstractModule;
 
 if (!defined('_PS_VERSION_')) {
 	exit;
 }
 
-class Weather extends CertidealAbstractModule {
+// class Weather extends \Certideal\PrestashopHelpers\CertidealAbstractModule {
+class Weather extends \Module {
 	protected $config_form = false;
 
 	public function __construct() {
@@ -47,8 +47,10 @@ class Weather extends CertidealAbstractModule {
 
 		ConfigurationCore::updateValue('OPENWEATHER_API_KEY', AppConfig::OPENWEATHER_API_KEY);
 		ConfigurationCore::updateValue('OPENWEATHER_BASE_URL', AppConfig::OPENWEATHER_BASE_URL);
+		ConfigurationCore::updateValue('OPENWEATHER_URI', AppConfig::OPENWEATHER_URI);
 		ConfigurationCore::updateValue('FREEWEATHER_API_KEY', AppConfig::FREEWEATHER_API_KEY);
 		ConfigurationCore::updateValue('FREEWEATHER_BASE_URL', AppConfig::FREEWEATHER_BASE_URL);
+		ConfigurationCore::updateValue('FREEWEATHER_URI', AppConfig::FREEWEATHER_URI);
 		ConfigurationCore::updateValue('BASE_URL', AppConfig::BASE_URL);
 
 		return parent::install() &&
@@ -62,7 +64,6 @@ class Weather extends CertidealAbstractModule {
 		$tab->module = $this->name;
 		$tab->id_parent = (int)Tab::getIdFromClassName('AdminParentModules'); // under Modules menu
 		$tab->name = array();
-		// var_dump($tab);
 		foreach (Language::getLanguages(true) as $lang) {
 			$tab->name[$lang['id_lang']] = 'Weather Management';
 		}
@@ -158,6 +159,12 @@ class Weather extends CertidealAbstractModule {
 					array(
 						'col' => 6,
 						'type' => 'text',
+						'name' => 'OPENWEATHER_URI',
+						'label' => $this->l('OpenWeather URI'),
+					),
+					array(
+						'col' => 6,
+						'type' => 'text',
 						'name' => 'FREEWEATHER_API_KEY',
 						'label' => $this->l('FreeWeather API Key'),
 					),
@@ -166,6 +173,12 @@ class Weather extends CertidealAbstractModule {
 						'type' => 'text',
 						'name' => 'FREEWEATHER_BASE_URL',
 						'label' => $this->l('FreeWeather Base URL'),
+					),
+					array(
+						'col' => 6,
+						'type' => 'text',
+						'name' => 'FREEWEATHER_URI',
+						'label' => $this->l('FreeWeather URI'),
 					),
 					array(
 						'col' => 6,
@@ -203,8 +216,10 @@ class Weather extends CertidealAbstractModule {
 			'WEATHER_ACCOUNT_PASSWORD' => ConfigurationCore::get('WEATHER_ACCOUNT_PASSWORD', null),
 			'OPENWEATHER_API_KEY'=> ConfigurationCore::get('OPENWEATHER_API_KEY', null),
 			'OPENWEATHER_BASE_URL'=> ConfigurationCore::get('OPENWEATHER_BASE_URL', null),
+			'OPENWEATHER_URI'=> ConfigurationCore::get('OPENWEATHER_URI', null),
 			'FREEWEATHER_API_KEY'=> ConfigurationCore::get('FREEWEATHER_API_KEY', null),
 			'FREEWEATHER_BASE_URL'=> ConfigurationCore::get('FREEWEATHER_BASE_URL', null),
+			'FREEWEATHER_URI'=> ConfigurationCore::get('FREEWEATHER_URI', null),
 			'BASE_URL'=> ConfigurationCore::get('BASE_URL', null),
 		);
 	}

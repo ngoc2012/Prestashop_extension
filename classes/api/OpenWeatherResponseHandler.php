@@ -6,7 +6,7 @@ require_once __DIR__ . "/../../models/History.php";
 require_once __DIR__ . "/WeatherApiResponse.php";
 require_once __DIR__ . "/AbstractWeatherApiResponseHandler.php";
 
-class FreeWeatherResponseHandler extends AbstractWeatherApiResponseHandler {
+class OpenWeatherResponseHandler extends AbstractWeatherApiResponseHandler {
 
 
 	// =====================
@@ -22,8 +22,8 @@ class FreeWeatherResponseHandler extends AbstractWeatherApiResponseHandler {
 		$history = new \History();
 		$history->cityId = $this->city->id;
 		$history->api = $this->api->getApiName();
-		$history->temperature = $unserializedData['current']['temp_c'];
-		$history->humidity = $unserializedData['current']['humidity'];
+		$history->temperature = $unserializedData['main']['temp'];
+		$history->humidity = $unserializedData['main']['humidity'];
 		$history->createdAt = date('Y-m-d H:i:s');
 		$history->add();
 		return new WeatherApiResponse($history);

@@ -7,6 +7,7 @@ require_once __DIR__ . '/../classes/WeatherService.php';
 
 use Certideal\CertiLogger\CertiLogger;
 use Certideal\PrestashopHelpers\CertidealAbstractService;
+use Certideal\RequestSender\Common\RequestSenderException;
 
 /**
  * Controller for the main page: Listing all the cities
@@ -28,6 +29,7 @@ class CitiesList extends CertidealAbstractService {
 	public function __construct($methodName = 'post') {
 		$this->methodName = $methodName;
 	}
+
 
 	// =========================
 	// === Public Methods ======
@@ -80,8 +82,11 @@ class CitiesList extends CertidealAbstractService {
 			));
 
 			$context->smarty->display(_PS_MODULE_DIR_ . 'weather/views/templates/citiesList.tpl');
-		} catch (\RuntimeException $e) {
+		} catch (RequestSenderException $e) {
 			ErrorController::initContent($e->getMessage());
+			exit;
+		} catch (Exception $e) {
+			ErrorController::initContent("Unexpected error: " . $e->getMessage());
 			exit;
 		}
 	}

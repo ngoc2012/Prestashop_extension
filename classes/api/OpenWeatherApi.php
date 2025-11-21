@@ -1,8 +1,14 @@
 <?php
 
 require_once __DIR__ . "/../../models/City.php";
+require_once __DIR__ . "/../../models/History.php";
 require_once __DIR__ . "/AbstractWeatherApi.php";
+require_once __DIR__ . "/WeatherApiLogger.php";
+require_once __DIR__ . "/WeatherApiRequest.php";
+require_once __DIR__ . "/OpenWeatherResponseHandler.php";
 
+use Certideal\RequestSender\Entity\BeanRequest\EmptyBeanRequest;
+use Certideal\RequestSender\RequestSender;
 
 /**
 * OpenWeatherApi class to interact with the OpenWeather API
@@ -20,11 +26,12 @@ class OpenWeatherApi extends AbstractWeatherApi {
 	* @param string|null $apiKey
 	* @param string|null $baseUrl
 	*/
-	public function __construct($apiKey = null, $baseUrl = null) {
+	public function __construct($apiKey = null, $baseUrl = null, $uri = null) {
 		parent::__construct();
 		$this->apiName = "OpenWeatherApi";
 		$this->apiKey  = $apiKey ?: ConfigurationCore::get('OPENWEATHER_API_KEY');
 		$this->baseUrl = $baseUrl ?: ConfigurationCore::get('OPENWEATHER_BASE_URL');
+		$this->uri = $uri ?: ConfigurationCore::get('OPENWEATHER_URI');
 	}
 
 
@@ -40,31 +47,21 @@ class OpenWeatherApi extends AbstractWeatherApi {
 	*/
 	public function fetchWeather($city) {
 		$cityNameEscaped = $city->encodeCityName();
-		$url = $this->getUrl($cityNameEscaped);
-		$response = file_get_contents($url, false, $this->weatherApiContext);
-		if (!$response) {
-			throw new RuntimeException("Failed to fetch weather data from OpenWeather API.");
-		}
-		$data = json_decode($response, true);
-		if (isset($data["cod"]) && $data["cod"] !== 200) {
-			throw new RuntimeException("OpenWeather API error: " . $data["cod"] . " - " . $data["message"]);
-		}
-		$temperature = $data['main']['temp'];
-		$humidity = $data['main']['humidity'];
-		return [$temperature, $humidity];
-	}
-
-
-	// =======================
-	// === Private methods ===
-	// =======================
-
-	/**
-	* Get the API request URL for a specific city.
-	* @param string $cityNameEscaped
-	* @return string The complete API request URL.
-	*/
-	private function getUrl($cityNameEscaped) {
-		return $this->baseUrl . "?q={$cityNameEscaped}&units=metric&lang=en&appid={$this->apiKey}";
+		$sender = new RequestSender(
+			$this->baseUrl,
+			WeatherApiLogger::getInstance(),
+			10,     // timeout 10 seconds
+			true    // debug mode
+		);
+		// https://api.openweathermap.org/data/2.5/weather?q=Quang+Ninh&units=metric&lang=en&appid=6bd83...
+		$request = new \WeatherApiRequest(new EmptyBeanRequest(), [
+			'appid' => $this->apiKey,
+			'q' => $cityNameEscaped,
+			'units' => "metric",
+			'lang' => 'en'
+		], null, $this->uri);
+		$responseHandler = new OpenWeatherResponseHandler(WeatherApiLogger::getInstance(), $city, $this);
+		$response = $sender->send($request, $responseHandler);
+		return $response->getData();
 	}
 }

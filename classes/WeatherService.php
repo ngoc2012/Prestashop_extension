@@ -34,15 +34,7 @@ class WeatherService extends CertidealAbstractService {
 				$api = new \OpenWeatherApi();
 				break;
 		}
-		list($temperature, $humidity) = $api->fetchWeather($city);
-		$history = new \History();
-		$history->cityId = $city->id;
-		$history->api = $api->getApiName();
-		$history->temperature = $temperature;
-		$history->humidity = $humidity;
-		$history->createdAt = date('Y-m-d H:i:s');
-		$history->add();
-		return $history;
+		return $api->fetchWeather($city);
 	}
 
 	// =====================
