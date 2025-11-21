@@ -18,8 +18,6 @@ class weatherCityWeatherModuleFrontController extends CertidealAbstractModuleFro
 	// === Variables ===
 	// =================
 
-	public $display_column_left = false;  // hides left column
-	public $display_column_right = false;  // hides right column
 	/* @var City */
 	private $city;
 	/* @var string */

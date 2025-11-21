@@ -10,39 +10,14 @@ if (!defined('_PS_VERSION_')) {
 	exit;
 }
 
-// class Weather extends \Certideal\PrestashopHelpers\CertidealAbstractModule {
-class Weather extends \Module {
-	protected $config_form = false;
+class Weather extends \Certideal\PrestashopHelpers\CertidealAbstractModule {
+
+
+	// ===================
+	// === Constructor ===
+	// ===================
 
 	public function __construct() {
-		$this->name = 'weather';
-		$this->tab = 'others';
-		$this->version = '1.0.0';
-		$this->author = 'Minh Ngoc Nguyen';
-		$this->controllers = array('example');
-		$this->need_instance = 0; //Use only if you need dynamic info (like version checks, custom status display, etc.)
-
-		/**
-		* Set $this->bootstrap to true if your module is compliant with bootstrap (PrestaShop 1.6)
-		*/
-		$this->bootstrap = true;
-
-		parent::__construct();
-
-		$this->displayName = $this->l('Weather');
-		$this->description = $this->l('Display weather of some cities in the world');
-
-		$this->ps_versions_compliancy = array('min' => '1.6', 'max' => '9.0');
-	}
-
-	/**
-	* Don't forget to create update methods if needed:
-	* http://doc.prestashop.com/display/PS16/Enabling+the+Auto-Update
-	*/
-	public function install() {
-
-		include(dirname(__FILE__).'/sql/install.php');
-
 		include_once dirname(__FILE__).'/config/AppConfig.php';
 
 		ConfigurationCore::updateValue('OPENWEATHER_API_KEY', AppConfig::OPENWEATHER_API_KEY);
@@ -51,42 +26,25 @@ class Weather extends \Module {
 		ConfigurationCore::updateValue('FREEWEATHER_API_KEY', AppConfig::FREEWEATHER_API_KEY);
 		ConfigurationCore::updateValue('FREEWEATHER_BASE_URL', AppConfig::FREEWEATHER_BASE_URL);
 		ConfigurationCore::updateValue('FREEWEATHER_URI', AppConfig::FREEWEATHER_URI);
-		ConfigurationCore::updateValue('BASE_URL', AppConfig::BASE_URL);
 
-		return parent::install() &&
-		$this->installTab() &&
-		$this->registerHook('displayHome');
+		parent::__construct();
 	}
 
-	private function installTab() {
-		$tab = new Tab();
-		$tab->class_name = 'AdminWeather';
-		$tab->module = $this->name;
-		$tab->id_parent = (int)Tab::getIdFromClassName('AdminParentModules'); // under Modules menu
-		$tab->name = array();
-		foreach (Language::getLanguages(true) as $lang) {
-			$tab->name[$lang['id_lang']] = 'Weather Management';
-		}
 
-		return $tab->add();
+	// ====================
+	// === Hook Methods ===
+	// ====================
+
+	public function hookDisplayHome() {
+		require_once __DIR__.'/controllers/CitiesList.php';
+		$weatherController = new CitiesList('post');
+		$weatherController->initContent();
 	}
 
-	public function uninstall() {
-		//Configuration::deleteByName('WEATHER_LIVE_MODE');
 
-		include(dirname(__FILE__).'/sql/uninstall.php');
-
-		return parent::uninstall() && $this->uninstallTab();
-	}
-
-	private function uninstallTab() {
-		$id_tab = Tab::getIdFromClassName('AdminWeather');
-		if ($id_tab) {
-			$tab = new Tab($id_tab);
-			return $tab->delete();
-		}
-		return true;
-	}
+	// ==========================
+	// === Configuration Form ===
+	// ==========================
 
 	/**
 	* Load the configuration form
@@ -181,12 +139,6 @@ class Weather extends \Module {
 						'label' => $this->l('FreeWeather URI'),
 					),
 					array(
-						'col' => 6,
-						'type' => 'text',
-						'name' => 'BASE_URL',
-						'label' => $this->l('Base URL'),
-					),
-					array(
 						'col' => 3,
 						'type' => 'text',
 						'prefix' => '<i class="icon icon-envelope"></i>',
@@ -220,7 +172,6 @@ class Weather extends \Module {
 			'FREEWEATHER_API_KEY'=> ConfigurationCore::get('FREEWEATHER_API_KEY', null),
 			'FREEWEATHER_BASE_URL'=> ConfigurationCore::get('FREEWEATHER_BASE_URL', null),
 			'FREEWEATHER_URI'=> ConfigurationCore::get('FREEWEATHER_URI', null),
-			'BASE_URL'=> ConfigurationCore::get('BASE_URL', null),
 		);
 	}
 
@@ -228,25 +179,48 @@ class Weather extends \Module {
 	* Save form data.
 	*/
 	protected function postProcess() {
-		$form_values = $this->getConfigFormValues();
+		$formValues = $this->getConfigFormValues();
 
-		foreach (array_keys($form_values) as $key) {
+		foreach (array_keys($formValues) as $key) {
 			ConfigurationCore::updateValue($key, Tools::getValue($key));
 		}
 	}
 
-	public function hookDisplayHome() {
-		require_once __DIR__.'/controllers/CitiesList.php';
-		$weatherController = new CitiesList('post');
-		$weatherController->initContent();
+
+	// ==================================
+	// === Override Certideal Methods ===
+	// ==================================
+
+	/**
+	 * {@inheritDoc}
+	 * @see \Certideal\PrestashopHelpers\CertidealAbstractModule::getModuleTabs()
+	 */
+	protected function getModuleTabs() {
+		return [
+			[
+				'name' => [1 => 'Weather Management'],
+				'class_name' => 'AdminWeather',
+				'id_parent' => (int)\Tab::getIdFromClassName('AdminParentModules'),
+				'child_tab' => false,
+				'active' => true,
+			],
+		];
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * @see \Certideal\PrestashopHelpers\CertidealAbstractModule::getModuleHooks()
+	 */
+	protected function getModuleHooks() {
+		return [
+			'displayHome'
+		];
 	}
 
 
-	// ========================
-	// === Override Methods ===
-	// ========================
-
+	// ==================================
 	// === Abstract Certideal Methods ===
+	// ==================================
 
 	/**
 	 * {@inheritDoc}

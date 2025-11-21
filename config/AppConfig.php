@@ -16,5 +16,4 @@ class AppConfig {
 	const FREEWEATHER_API_KEY = 'd0087dd7e57c4ed5b23142120250411';
 	const FREEWEATHER_BASE_URL = 'http://api.weatherapi.com';
 	const FREEWEATHER_URI = 'v1/current.json';
-	const BASE_URL = 'http://localhost/prestashop/en/';
 }
