@@ -4,7 +4,7 @@ require_once dirname(__FILE__).'/../../models/City.php';
 
 use Certideal\PrestashopHelpers\CertidealAbstractModuleAdminController;
 
-class AdminWeatherController extends CertidealAbstractModuleAdminController {
+class AdminCityController extends CertidealAbstractModuleAdminController {
 
 
 	// ===================
@@ -71,8 +71,7 @@ class AdminWeatherController extends CertidealAbstractModuleAdminController {
 				],
 			],
 			'submit' => [
-				'title' => $this->l('Save'),
-				'class' => 'btn btn-primary'
+				'title' => $this->l('Save')
 			]
 		];
 		return parent::renderForm();

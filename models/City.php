@@ -78,15 +78,13 @@ class City extends CertidealAbstractObjectModel {
 	* @return City[]
 	*/
 	public static function findLastVisitedCities($limit = 10) {
-		$limit = (int)$limit;
 		$sql = "
 			SELECT c.*
 			FROM `" . _DB_PREFIX_ . self::$definition['table'] . "` c
 			LEFT JOIN `" . _DB_PREFIX_ . "history` h ON h.cityId = c.id_city
 			GROUP BY c.id_city
 			ORDER BY MAX(h.createdAt) DESC, c.id_city ASC
-			LIMIT $limit;
-    	";
+			LIMIT " . (int)$limit;
 		$cities = Db::getInstance()->executeS($sql);
 		if (!$cities) {
 			return [];
