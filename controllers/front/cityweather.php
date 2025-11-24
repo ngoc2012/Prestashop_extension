@@ -63,31 +63,24 @@ class weatherCityWeatherModuleFrontController extends CertidealAbstractModuleFro
 	private function checkInput() {
 		$this->context = \ContextCore::getContext();
 
-		$methodName = isset($_GET['method']) ? $_GET['method'] : 'post';
-
-		if ($methodName == "get") {
-			$method = $_GET;
-		} else {
-			$method = $_POST;
-		}
-		if (isset($method["name"])) {
-			if (isset($method['id_city'])) {
-				$this->city = new \City(intval($method['id_city']));
-				if (!$this->city || $this->city->name !== trim($method['name'])) {
+		if (Tools::getIsset("name")) {
+			if (Tools::getIsset('id_city')) {
+				$this->city = new \City(intval(Tools::getValue('id_city')));
+				if (!$this->city || $this->city->name !== trim(Tools::getValue('name'))) {
 					ErrorController::initContent("City ID and name do not match.");
 					exit;
 				}
 			} else {
 				try {
-					$this->city = \City::findByName($method['name']);
+					$this->city = \City::findByName(Tools::getValue('name'));
 				} catch (\PrestaShopException $e) {
 					$this->city = new \City();
-					$this->city->name = trim($method['name']);
+					$this->city->name = trim(Tools::getValue('name'));
 					$this->city->add();
 				}
 			}
-			if (isset($method['api'])) {
-				$this->apiName = trim($method['api']);
+			if (Tools::getIsset('api')) {
+				$this->apiName = trim(Tools::getValue('api'));
 			} else {
 				$this->apiName = "OpenWeatherApi";
 			}
