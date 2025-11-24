@@ -79,7 +79,7 @@ class Weather extends \Certideal\PrestashopHelpers\CertidealAbstractModule {
 				"weather_homeLink" => $context->link->getPageLink('index'),
 			));
 
-			$context->smarty->display(_PS_MODULE_DIR_ . 'weather/views/templates/citiesList.tpl');
+			return $context->smarty->fetch(_PS_MODULE_DIR_ . 'weather/views/templates/citiesList.tpl');
 		} catch (\Certideal\RequestSender\Common\RequestSenderException $e) {
 			ErrorController::initContent($e->getMessage());
 			exit;
