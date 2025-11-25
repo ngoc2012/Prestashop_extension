@@ -60,6 +60,11 @@ class weatherCityWeatherModuleFrontController extends CertidealAbstractModuleFro
 		$this->setTemplate('cityweather.tpl');
 	}
 
+
+	// =======================
+	// === Private Methods ===
+	// =======================
+
 	private function checkInput() {
 		$this->context = \ContextCore::getContext();
 

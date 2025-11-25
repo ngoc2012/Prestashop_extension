@@ -9,6 +9,7 @@ if (!defined('_PS_VERSION_')) {
 }
 
 require_once __DIR__.'/models/City.php';
+require_once __DIR__.'/controllers/CitiesList.php';
 require_once __DIR__.'/classes/WeatherService.php';
 require_once __DIR__.'/classes/AbstractConfigForm.php';
 
@@ -45,55 +46,8 @@ class Weather extends AbstractConfigForm {
 	// ====================
 
 	public function hookDisplayHome() {
-		//require_once __DIR__.'/controllers/CitiesList.php';
-		$context = $this->context;
-		$apiName = 'OpenWeatherMap';
-		try {
-			$cities = \City::findLastVisitedCities(10);
-			if (count($cities) === 0) {
-				$lastCity = new \City();
-				$lastCity->name = 'Paris';
-				$lastCity->add();
-			} else {
-				try {
-					$lastHistory = \History::findLast();
-					$apiName = $lastHistory->api;
-					$lastCityId = $lastHistory->cityId;
-				} catch (\PrestaShopException $e) {
-					$lastCityId = $cities[0]->id;
-				}
-				$lastCity = new \City($lastCityId);
-			}
-		} catch (\PDOException $e) {
-			ErrorController::initContent($e->getMessage());
-			exit;
-		} catch (\InvalidArgumentException $e) {
-			ErrorController::initContent($e->getMessage());
-			exit;
-		}
-		try {
-			$history = WeatherService::getData($lastCity, $apiName);
-			$link = $context->link->getModuleLink(
-				'weather',
-				'cityweather'
-			);
-			$context->smarty->assign(array(
-				"weather_method"   => 'post',
-				"weather_city"     => $lastCity,
-				"weather_history"  => $history,
-				"weather_cities"   => $cities,
-				"weather_link"     => $link,
-				"weather_homeLink" => $context->link->getPageLink('index'),
-			));
-
-			return $context->smarty->fetch(_PS_MODULE_DIR_ . 'weather/views/templates/citiesList.tpl');
-		} catch (\Certideal\RequestSender\Common\RequestSenderException $e) {
-			ErrorController::initContent($e->getMessage());
-			exit;
-		} catch (Exception $e) {
-			ErrorController::initContent("Unexpected error: " . $e->getMessage());
-			exit;
-		}
+		$citiesList = new  CitiesList('post');
+		$citiesList->initContent();
 	}
 
 

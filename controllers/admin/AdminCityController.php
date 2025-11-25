@@ -33,6 +33,24 @@ class AdminCityController extends CertidealAbstractModuleAdminController {
 			],
 		];
 
+		$this->fields_form = [
+			'legend' => [
+				'title' => $this->l('City'),
+				'icon' => 'icon-globe'
+			],
+			'input' => [
+				[
+					'type' => 'text',
+					'label' => $this->l('City name'),
+					'name' => 'name',
+					'required' => true,
+				],
+			],
+			'submit' => [
+				'title' => $this->l('Save')
+			]
+		];
+
 		// Row actions
 		$this->addRowAction('edit');
 		$this->addRowAction('delete');
@@ -51,31 +69,10 @@ class AdminCityController extends CertidealAbstractModuleAdminController {
 		];
 	}
 
-	public function renderList() {
-		return parent::renderList();
-	}
 
-	public function renderForm() {
-		// Form fields
-		$this->fields_form = [
-			'legend' => [
-				'title' => $this->l('City'),
-				'icon' => 'icon-globe'
-			],
-			'input' => [
-				[
-					'type' => 'text',
-					'label' => $this->l('City name'),
-					'name' => 'name',
-					'required' => true,
-				],
-			],
-			'submit' => [
-				'title' => $this->l('Save')
-			]
-		];
-		return parent::renderForm();
-	}
+	// ==================================
+	// === Override Certideal Methods ===
+	// ==================================
 
 	/**
 	 *
